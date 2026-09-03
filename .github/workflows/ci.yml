@@ -1,0 +1,74 @@
+# Hermetic CI — everything here is free and deterministic, so it blocks merges.
+#
+# Two jobs:
+#  - tests: the 106-test suite across the supported Python range. Every LLM call
+#    is mocked at the llm.py boundary (see tests/conftest.py), so no API key is
+#    needed and nothing is billed.
+#  - gate: two checks on the committed artifacts rather than the code — the
+#    rules cache is validated against its regulation source (schema, provenance
+#    hash, unique IDs, verbatim-quote ratio), and the over-cap sample is run
+#    end-to-end through the real CLI. That sample is rejected at ingestion
+#    before any LLM call, which makes it the only end-to-end case that costs
+#    nothing to run.
+#
+# Anything that spends money lives in evals.yml and is opt-in.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install dependencies
+        run: uv sync --frozen --python ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: uv run --frozen pytest
+
+  gate:
+    name: static gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # Catches an extractor that paraphrases instead of citing, and a rules
+      # cache left stale after the regulation source changed. No model involved.
+      - name: Validate rules cache
+        run: uv run --frozen python evals/check_rules_cache.py
+
+      # End-to-end through the real CLI, with no key present, to prove the
+      # keyless rejection path still exits 2 rather than reaching the API.
+      - name: Keyless end-to-end smoke
+        run: uv run --frozen python evals/run_samples.py --tier free
