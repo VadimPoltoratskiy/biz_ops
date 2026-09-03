@@ -334,6 +334,105 @@ optimisation and is listed under [what would change](#what-would-change-with-mor
 
 ---
 
+## CI
+
+Three workflows, split by what they cost to run.
+
+### `ci.yml` — hermetic, blocks merges
+
+Runs on every push to `main` and every pull request. Nothing here touches the API, so it is
+free and deterministic.
+
+| Job | What it proves |
+|---|---|
+| `tests` | The 106-test suite on Python 3.11, 3.12 and 3.13. Every LLM call is mocked at the `llm.py` boundary, so no key is needed. |
+| `gate` | The committed rules cache is schema-valid, its `source_hash` still matches the regulation file, `rule_id`s are unique, and at least 95% of `source_quote` values are exact substrings of the source. Then `samples/overlimit.txt` is run end-to-end through the real CLI with no key present, proving the over-cap path still exits 2 before reaching the API. |
+
+The verbatim-quote ratio is the cheapest available check that the extractor cited rather than
+paraphrased. It currently reads 73/75 (97.3%); the floor is set at 95% so the two known
+paraphrases pass but a regression fails.
+
+```bash
+uv run pytest
+uv run python evals/check_rules_cache.py
+uv run python evals/run_samples.py --tier free
+```
+
+### `evals.yml` — live samples, opt-in only
+
+The only workflow that spends money, so it never triggers on its own. Start it either by
+adding the `run-evals` label to a PR, or from the Actions tab via **Run workflow** (which
+lets you include the borderline `subtle.txt` case).
+
+The model is pinned to `claude-haiku-4-5` in the workflow and is deliberately **not** a
+dispatch input, so nothing pricier can be selected from the Actions UI. Running a
+higher-fidelity model is a local operation:
+`COMPLIANCE_MODEL=claude-opus-5 uv run python evals/run_samples.py --tier live`.
+
+Each case runs the full pipeline and scores the **verdicts**, not the exit code. The exit code
+folds `unclear` in with `non-compliant`, so a model that is merely more cautious about
+preconditions it cannot verify from plain text — font size, whether an investment is
+restricted mass market — turns a clean run into exit 1 without ever alleging a breach. That is
+the fail-safe design working, not a regression. So each case asserts the two properties that
+are load-bearing for a compliance tool and hold across models:
+
+| Sample | Assertion | Meaning |
+|---|---|---|
+| `compliant.txt` | at most 1 `non-compliant` | does not invent breaches on clean copy |
+| `hype.txt` | at least 1 `non-compliant` | catches the breach it must catch |
+| `subtle.txt` | at least 1 `non-compliant` | borderline, excluded by default |
+
+The exit code and overall outcome are still reported for context, and the free tier asserts its
+exit code exactly, since that path is deterministic.
+
+**Why the clean-copy tolerance is 1 and not 0.** `claude-haiku-4-5` is unstable on the control
+sample: across two runs of identical input it returned 0 breaches once and 1 the next — the
+latter a high-confidence claim that the risk warning lacked "its own border or box… bold or
+underlined text formatting", which is unknowable from plain text, and a rule class the same
+model marked `unclear` on the previous run. `claude-opus-5` returns 0 breaches and 0 unclear
+on this sample. The tolerance buys the cheap model, and the cost is explicit: a regression that
+invents exactly one breach on clean copy will not fail. What still fails is a model that
+invents several, or one that stops catching real breaches. Pinning the model back to
+`claude-opus-5` is what would let the tolerance go to 0.
+
+Cost is the reason for the defaults. A check is 75 evaluation calls at ~218k input / ~26k
+output tokens. On `claude-opus-5` ($5/$25 per MTok) that is ~$1.74 per sample; the workflow
+defaults to `claude-haiku-4-5` ($1/$5), measured at **$0.23 per sample** — so a full run is
+about **$0.46 rather than $3.48**. The rules cache is committed, so a cache hit means no
+extraction call at all.
+
+The job reports the *actual* spend per case, computed from the token counts already recorded
+in each `run.json`, not an estimate. Results are written to `eval-result.json`, uploaded as an
+artifact, and summarised in the job summary.
+
+```bash
+COMPLIANCE_MODEL=claude-haiku-4-5 uv run python evals/run_samples.py --tier live
+```
+
+### `devdigest-review.yml` — AI review on every PR
+
+Runs the bundled reviewer in `.devdigest/runner/` against the PR diff and posts a GitHub
+review. Its agent config (`.devdigest/agents/security-reviewer.yaml`) names two skills that
+encode this repo's own invariants rather than generic advice:
+
+- `pipeline-architecture` — stages stay pure, only `pipeline.py` orchestrates and catches,
+  only `runlog.py` writes, exit-code precedence is fail-safe, evidence quotes are verified in
+  Python, one `append_history` per run.
+- `untrusted-input` — the marketing text is third-party content, never instruction: delimiters
+  must hold, model output must be validated before it steers control flow, and the cap must
+  stay ahead of the first billed call.
+
+### Required secrets
+
+| Secret | Used by | Needed for |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | `evals.yml` | Live sample evals |
+| `OPENROUTER_API_KEY` | `devdigest-review.yml` | The AI reviewer |
+
+`ci.yml` needs no secrets at all.
+
+---
+
 ## Edge cases and known limitations
 
 - **Code-point counting**: the 2000-code-point cap is counted in Unicode code points using

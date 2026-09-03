@@ -26,3 +26,7 @@ dist/
 
 # rules/ is NOT ignored — the committed rules cache must remain tracked
 # data/ is NOT ignored — the regulation source is committed
+
+# CI eval artifacts (regenerated per run)
+eval-result.json
+devdigest-result.json

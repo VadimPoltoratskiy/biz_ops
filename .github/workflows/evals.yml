@@ -1,0 +1,105 @@
+# Live sample evals — the only workflow that spends money, so it never runs
+# by itself.
+#
+# Cost, measured rather than guessed: a check is 75 evaluation calls (one per
+# extracted rule) at ~218k input / ~26k output tokens. On claude-opus-5
+# ($5/$25 per MTok) that is ~$1.74 per sample; on claude-haiku-4-5 ($1/$5) it
+# is ~$0.35. The default here is Haiku over the two samples that make each
+# other meaningful — the breach case and the clean control — so a full run is
+# roughly $0.70 instead of $7. The rules cache is committed, so no extraction
+# call is made on a cache hit.
+#
+# Triggers are both opt-in: the `run-evals` label on a PR, or a manual dispatch
+# where the sample set can be widened. Ordinary pushes and PRs cost nothing.
+# The model is fixed at claude-haiku-4-5 and is not overridable from the UI.
+#
+# The job reports the ACTUAL spend per case, computed from the token counts
+# already recorded in each run.json — so the number in the summary is what was
+# billed, not an estimate.
+name: evals
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+  workflow_dispatch:
+    inputs:
+      all_samples:
+        description: 'Include the borderline subtle.txt case (+~$0.35 on Haiku)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  live:
+    name: labelled samples
+    # The label gate is what keeps this off ordinary PRs. `synchronize` is in
+    # the trigger list so a labelled PR re-evaluates when new commits land,
+    # but an unlabelled one still does nothing.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'run-evals')
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Hardcoded, not a dispatch input: nothing pricier than Haiku may run
+      # remotely, and an input would let the Actions UI override that. Running a
+      # higher-fidelity model is a deliberate local operation:
+      #   COMPLIANCE_MODEL=claude-opus-5 uv run python evals/run_samples.py --tier live
+      COMPLIANCE_MODEL: claude-haiku-4-5
+      # Four concurrent evaluation calls is the agent's own default; it changes
+      # wall-clock, not spend.
+      COMPLIANCE_MAX_CONCURRENCY: '4'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Fail early if no key is configured
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is not set — add it in Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Run labelled sample evals
+        run: |
+          uv run --frozen python evals/run_samples.py \
+            --tier live \
+            ${{ inputs.all_samples && '--all' || '' }} \
+            --out eval-result.json
+
+      - name: Summarise cost and outcomes
+        if: always()
+        run: |
+          if [ -f eval-result.json ]; then
+            {
+              echo "### Eval results"
+              echo
+              echo "Model: \`$COMPLIANCE_MODEL\` · Spend: **\$$(jq -r '.total_cost_usd' eval-result.json)**"
+              echo
+              echo "| Sample | Expected | Actual | Outcome | Cost |"
+              echo "|---|---|---|---|---|"
+              jq -r '.results[] | "| \(.sample) | \(.expected_exit) | \(.actual_exit) | \(.outcome) | $\(.cost_usd // 0) |"' eval-result.json
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload eval result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-result
+          path: eval-result.json
+          if-no-files-found: ignore
