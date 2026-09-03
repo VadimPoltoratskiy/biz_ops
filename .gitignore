@@ -1,23 +1,28 @@
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-files
-*.bclicense
-*.flf
-#Test results file
-TestResults.xml
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+.uv/
+
+# Environment files (never commit secrets; .env.example IS tracked)
+.env
+
+# Per-run artifact directories (user-local runtime data, not source)
+runs/
+
+# Distribution artifacts
+dist/
+*.egg-info/
+.eggs/
+
+# Editor noise
+.DS_Store
+*.swp
+
+# rules/ is NOT ignored — the committed rules cache must remain tracked
+# data/ is NOT ignored — the regulation source is committed
