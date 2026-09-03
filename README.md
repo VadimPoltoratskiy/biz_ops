@@ -75,6 +75,38 @@ This prevents a partial result from being read as a clean pass.
 
 ---
 
+## How this was built — the AI-native workflow
+
+Built with Claude Code, spec-first. The working artifacts are committed rather than
+summarised, so the reasoning is auditable end to end:
+
+| Artifact | What it is |
+|---|---|
+| [`specs/SPEC-01-regulation-compliance-agent.md`](specs/SPEC-01-regulation-compliance-agent.md) | The spec — 39 numbered acceptance criteria, goals and explicit non-goals, written before any code |
+| [`plans/PLAN-SPEC-01.md`](plans/PLAN-SPEC-01.md) | The implementation plan derived from it, task by task |
+| [`verifications/Verification-SPEC-01.md`](verifications/Verification-SPEC-01.md) | An adversarial pass scoring every AC: **36 satisfied, 1 partial, 0 unimplemented** |
+| [`INSIGHTS.md`](INSIGHTS.md) | The running record of what was learned while building |
+
+The loop is visible in the artifacts. Verification found that 2 of 75 `source_quote` values
+were whitespace-normalised rather than verbatim (AC-13, accepted rather than fixed) — and that
+same 73/75 figure is now a **CI gate** with a 95% floor, so the defect the review caught cannot
+silently get worse. A finding became a permanent check.
+
+The later work — CI, the eval harness, `run.sh` — ran the same loop with agents per stage:
+research → plan → implement → review. It earned its keep on the review step rather than the
+build step. Reviewing the generated `run.sh` turned up a bug where every exit code was
+captured as `0`, because `if ! cmd; then ec=$?` reads the *inverted* status: the wrapper
+reported success even when a compliance check found breaches. Both AI reviewers missed it; one
+returned PASS having "checked exit codes" against the README table rather than testing
+propagation. The lesson is in the commit history and worth stating plainly — generated code
+needs the same adversarial scrutiny as hand-written code, and a reviewer's PASS is evidence,
+not proof.
+
+Every commit on this branch carries a `Co-Authored-By: Claude` trailer, and the messages record
+what was decided and why, not just what changed.
+
+---
+
 ## Why FCA COBS 4
 
 The regulation source had to satisfy one hard constraint: it must be available as plain,
