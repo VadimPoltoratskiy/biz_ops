@@ -23,7 +23,7 @@ Then:
 
 The script handles dependency installation, API key detection, rules cache validation, and
 an interactive menu. Free options (test suite, cache check, the over-limit sample) require
-no API key. Billed options (~$0.23 each on the default model, `claude-haiku-4-5`) require
+no API key. Billed options (~$0.19 each on the default model, `claude-haiku-4-5`) require
 `ANTHROPIC_API_KEY` in `.env`.
 
 For the raw CLI, see [BYOK setup](#byok-setup-under-one-minute) below.
@@ -325,7 +325,7 @@ inspect decomposition quality without spending tokens.
 
 > **Note:** These runs were produced with `claude-opus-5`. The default model is now
 > `claude-haiku-4-5`; on Haiku, `compliant.txt` returns FINDINGS (not CLEAN) and costs
-> approximately $0.23 per run rather than $1.73. All content below is preserved verbatim
+> approximately $0.19 per run rather than $1.73. All content below is preserved verbatim
 > as the original captured output — do not regenerate it.
 
 These are real runs, not illustrations. Decomposition of the COBS 4 source produced
@@ -453,8 +453,8 @@ invents several, or one that stops catching real breaches. Pinning the model bac
 
 Cost is the reason for the defaults. A check is 75 evaluation calls at ~218k input / ~26k
 output tokens. On `claude-opus-5` ($5/$25 per MTok) that is ~$1.74 per sample; the workflow
-defaults to `claude-haiku-4-5` ($1/$5), measured at **$0.23 per sample** — so a full run is
-about **$0.46 rather than $3.48**. The rules cache is committed, so a cache hit means no
+defaults to `claude-haiku-4-5` ($1/$5), measured at **$0.19 per sample** — so a full run is
+about **$0.38 rather than $3.48**. The rules cache is committed, so a cache hit means no
 extraction call at all.
 
 The job reports the *actual* spend per case, computed from the token counts already recorded

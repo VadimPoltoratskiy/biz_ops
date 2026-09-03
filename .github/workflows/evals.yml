@@ -4,7 +4,7 @@
 # Cost, measured rather than guessed: a check is 75 evaluation calls (one per
 # extracted rule) at ~218k input / ~26k output tokens. On claude-opus-5
 # ($5/$25 per MTok) that is ~$1.74 per sample; on claude-haiku-4-5 ($1/$5) it
-# is ~$0.35. The default here is Haiku over the two samples that make each
+# is ~$0.19. The default here is Haiku over the two samples that make each
 # other meaningful — the breach case and the clean control — so a full run is
 # roughly $0.70 instead of $7. The rules cache is committed, so no extraction
 # call is made on a cache hit.
@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
     inputs:
       all_samples:
-        description: 'Include the borderline subtle.txt case (+~$0.35 on Haiku)'
+        description: 'Include the borderline subtle.txt case (+~$0.19 on Haiku)'
         type: boolean
         default: false
 

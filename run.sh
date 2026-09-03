@@ -76,8 +76,11 @@ from evals.run_samples import PRICES
 model = '${CURRENT_MODEL}'
 # Measured profiles: (input_tokens, output_tokens) for a 75-rule full run.
 PROFILES = {
+    # Opus profile predates the separator slimming, so it overestimates
+    # slightly. Overestimating at a consent prompt is the safe direction;
+    # re-measure from a real opus run before quoting it as exact.
     'claude-opus-5':   (217504, 25715),
-    'claude-haiku-4-5': (172000, 11000),
+    'claude-haiku-4-5': (131000, 11400),
 }
 profile = PROFILES.get(model)
 price = PRICES.get(model)
