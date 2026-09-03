@@ -13,6 +13,11 @@
 # where the sample set can be widened. Ordinary pushes and PRs cost nothing.
 # The model is fixed at claude-haiku-4-5 and is not overridable from the UI.
 #
+# Note on the dispatch trigger: GitHub only offers "Run workflow" for workflows
+# that exist on the DEFAULT branch, so until this file is merged to main the
+# label is the only way to start a run. `run-evals` is not a default GitHub
+# label either — it has to be created once before it can be applied.
+#
 # The job reports the ACTUAL spend per case, computed from the token counts
 # already recorded in each run.json — so the number in the summary is what was
 # billed, not an estimate.

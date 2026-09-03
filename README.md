@@ -416,9 +416,16 @@ uv run python evals/run_samples.py --tier free
 
 ### `evals.yml` — live samples, opt-in only
 
-The only workflow that spends money, so it never triggers on its own. Start it either by
-adding the `run-evals` label to a PR, or from the Actions tab via **Run workflow** (which
-lets you include the borderline `subtle.txt` case).
+The only workflow that spends money, so it never triggers on its own. There are two ways to
+start it, and **only the first works before this workflow reaches the default branch**:
+
+1. **Add the `run-evals` label to a PR.** The workflow listens for the `labeled` event, so the
+   run starts immediately — no new commit needed. The label is not one of GitHub's defaults;
+   create it once (`Issues → Labels → New label`, or inline from the PR's Labels menu).
+2. **Actions tab → Run workflow**, which also lets you include the borderline `subtle.txt`
+   case. GitHub only offers manual dispatch for workflows that exist on the **default branch**,
+   so this button does not appear while `evals.yml` lives only on a feature branch. It becomes
+   available once this workflow is merged to `main`.
 
 The model is pinned to `claude-haiku-4-5` in the workflow and is deliberately **not** a
 dispatch input, so nothing pricier can be selected from the Actions UI. Running a
