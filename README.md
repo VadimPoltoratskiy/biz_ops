@@ -7,6 +7,29 @@ stdout with a process exit code that distinguishes clean, findings, and incomple
 
 ---
 
+## Run it locally
+
+**Prerequisites:** Python >= 3.11 and [uv](https://docs.astral.sh/uv/). Install uv with:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then:
+
+```bash
+./run.sh
+```
+
+The script handles dependency installation, API key detection, rules cache validation, and
+an interactive menu. Free options (test suite, cache check, the over-limit sample) require
+no API key. Billed options (~$0.23 each on the default model, `claude-haiku-4-5`) require
+`ANTHROPIC_API_KEY` in `.env`.
+
+For the raw CLI, see [BYOK setup](#byok-setup-under-one-minute) below.
+
+---
+
 ## What was built
 
 The pipeline has four pure stages orchestrated by a single coordinator:
@@ -228,6 +251,9 @@ and the pipeline can be re-run from the cached decomposition state without re-sp
 
 ## BYOK setup (under one minute)
 
+> **Quickstart:** `./run.sh` guides you through all of the steps below interactively.
+> The manual steps here are for reference or headless/CI use.
+
 1. Copy the example environment file:
    ```bash
    cp .env.example .env
@@ -243,10 +269,13 @@ and the pipeline can be re-run from the cached decomposition state without re-sp
    uv sync
    ```
 
-4. Extract the rules cache (once, or after a regulation source update):
+4. The rules cache is already committed. With the committed cache, `extract-rules` is a
+   free no-op — it prints `Rules loaded from cache. (75 rules)` and exits 0 without any
+   API call:
    ```bash
    uv run compliance-agent extract-rules
    ```
+   Only re-run with `--refresh` if you have changed the regulation source file.
 
 5. Run a check:
    ```bash
@@ -258,19 +287,46 @@ The `--refresh` flag forces re-extraction regardless of cache state. Commit
 `rules/fca-cobs-4-financial-promotions.json` after a successful extraction so teammates can
 inspect decomposition quality without spending tokens.
 
+### Command reference
+
+| Command | Description |
+|---------|-------------|
+| `compliance-agent check --text <file>` | Evaluate a file against FCA COBS 4 rules |
+| `compliance-agent check --text -` | Read marketing text from stdin |
+| `compliance-agent extract-rules` | Validate rules cache (free with committed cache) |
+| `compliance-agent extract-rules --refresh` | Force re-extraction (spends tokens, needs key) |
+| `compliance-agent history` | List all past runs from `runs/history.jsonl` |
+| `compliance-agent show <run_id>` | Display the Markdown report for a past run |
+
+**Exit codes:**
+
+| Code | Meaning |
+|------|---------|
+| 0 | Clean — no breaches found |
+| 1 | Findings — at least one `non-compliant` or `unclear` verdict |
+| 2 | Incomplete — pipeline failure or any `error` verdict |
+
+`runs/` is gitignored and starts empty on a fresh clone. `compliance-agent history` and
+`compliance-agent show` require at least one completed run to exist in `runs/history.jsonl`.
+
 ### Environment variables
 
 | Variable | Default | Description |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | — | Required at runtime |
-| `COMPLIANCE_MODEL` | `claude-opus-5` | Model for both extraction and evaluation |
+| `COMPLIANCE_MODEL` | `claude-haiku-4-5` | Model for both extraction and evaluation |
 | `COMPLIANCE_MARKETING_TEXT_CAP` | `2000` | Maximum input length in Unicode code points |
 | `COMPLIANCE_MAX_CONCURRENCY` | `4` | Concurrent evaluation calls |
 | `COMPLIANCE_MAX_RETRIES` | `3` | Retry budget for transient LLM errors |
 
 ---
 
-## Captured run
+## Captured run (claude-opus-5)
+
+> **Note:** These runs were produced with `claude-opus-5`. The default model is now
+> `claude-haiku-4-5`; on Haiku, `compliant.txt` returns FINDINGS (not CLEAN) and costs
+> approximately $0.23 per run rather than $1.73. All content below is preserved verbatim
+> as the original captured output — do not regenerate it.
 
 These are real runs, not illustrations. Decomposition of the COBS 4 source produced
 **75 checkable rules** — 33 `mandatory_disclosure`, 17 `presentation`, 10 `prohibition`,
@@ -452,6 +508,22 @@ encode this repo's own invariants rather than generic advice:
 - **Single-run-at-a-time**: `history.jsonl` is appended without file locking. Parallel `check`
   invocations would produce interleaved lines. This is documented and acceptable for a
   single-user CLI.
+
+- **Missing API key at runtime:** if `ANTHROPIC_API_KEY` is absent from both the environment
+  and `.env`, the pipeline now raises `LLMAuthError` immediately and exits 2 — no retry
+  back-off, no HTTP calls. Set the key in `.env` (copy `.env.example`) or export it:
+  `export ANTHROPIC_API_KEY=sk-ant-...`.
+
+- **Stale or corrupt rules cache:** if `rules/fca-cobs-4-financial-promotions.json` is
+  missing, malformed, or its `source_hash` no longer matches the regulation file,
+  `evals/check_rules_cache.py` exits 1 and names the remedy (`extract-rules --refresh`).
+  `run.sh` runs this check automatically before any billed operation.
+
+- **Non-numeric `COMPLIANCE_*` environment variables:** `config.py` passes the raw string
+  directly to `int()` (lines 49–53). A non-integer value such as
+  `COMPLIANCE_MAX_RETRIES=yes` raises an uncaught `ValueError` with a Python traceback
+  rather than a friendly error message. Values must be plain integers; there is no input
+  validation at config time.
 
 ---
 

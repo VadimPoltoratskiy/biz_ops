@@ -117,3 +117,31 @@ def test_successful_extraction_returns_rules_and_usage():
     assert len(rules.rules) == 1
     assert usage.input_tokens == 17000
     assert usage.output_tokens == 9000
+
+
+def test_missing_api_key_raises_auth_error_without_retrying():
+    """
+    A missing API key must raise LLMAuthError immediately — no retry sleeps.
+
+    Regression test for the pre-D3 behaviour: a missing key yielded a TypeError
+    at HTTP-request time. _classify_exception returned 'retryable' for unknown
+    errors, so each call slept 2^0 + 2^1 + 2^2 + jitter ≈ 9 s across its three
+    retries before raising LLMRetryExhaustedError. On the evaluation path that
+    cost is paid per rule — 75 rules at concurrency 4 is minutes of silence,
+    ending in a report full of error verdicts rather than a clear failure.
+
+    After D3, _make_sync_client raises LLMAuthError before constructing any client,
+    and the extract_rules retry loop re-raises it immediately via
+    `except LLMAuthError: raise`. The time.sleep patch proves zero sleeps occurred.
+    """
+    no_key = Settings(
+        api_key=None,
+        model="claude-haiku-4-5",
+        marketing_text_cap=2000,
+        max_concurrency=4,
+        max_retries=3,  # would produce 3 retry sleeps if the bug regresses
+    )
+    with patch("time.sleep") as mock_sleep:
+        with pytest.raises(llm.LLMAuthError, match="API key"):
+            llm.extract_rules("source text", no_key, "prompt")
+    mock_sleep.assert_not_called()

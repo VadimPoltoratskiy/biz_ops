@@ -22,7 +22,7 @@ class Settings:
     """ANTHROPIC_API_KEY — required at runtime, validated in llm.py, not here."""
 
     model: str
-    """LLM model name; default 'claude-opus-5'."""
+    """LLM model name; default 'claude-haiku-4-5'."""
 
     marketing_text_cap: int
     """Maximum allowed marketing text length in Unicode code points; default 2000."""
@@ -45,7 +45,7 @@ def load_settings() -> Settings:
 
     return Settings(
         api_key=os.environ.get("ANTHROPIC_API_KEY"),
-        model=os.environ.get("COMPLIANCE_MODEL", "claude-opus-5"),
+        model=os.environ.get("COMPLIANCE_MODEL", "claude-haiku-4-5"),
         marketing_text_cap=int(
             os.environ.get("COMPLIANCE_MARKETING_TEXT_CAP", "2000")
         ),

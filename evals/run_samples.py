@@ -122,7 +122,7 @@ def run_case(case: Case, root: Path, model: str) -> dict:
         text=True,
     )
 
-    record = _latest_run_record(root)
+    record = latest_run_record(root)
     breaches = None
     if record is not None:
         breaches = sum(
@@ -158,7 +158,7 @@ def run_case(case: Case, root: Path, model: str) -> dict:
         "breaches": breaches,
         "outcome": record.get("overall_outcome") if record else None,
         "run_id": record.get("run_id") if record else None,
-        "cost_usd": _cost_of(record, model) if record else None,
+        "cost_usd": cost_of(record, model) if record else None,
     }
 
     status = "PASS" if result["passed"] else "FAIL"
@@ -177,7 +177,7 @@ def run_case(case: Case, root: Path, model: str) -> dict:
     return result
 
 
-def _latest_run_record(root: Path) -> dict | None:
+def latest_run_record(root: Path) -> dict | None:
     """Read the run.json the most recent history line points at."""
     history = runs_dir(root) / "history.jsonl"
     if not history.exists():
@@ -192,7 +192,7 @@ def _latest_run_record(root: Path) -> dict | None:
         return None
 
 
-def _cost_of(record: dict, model: str) -> float | None:
+def cost_of(record: dict, model: str) -> float | None:
     """Actual USD spend for a run, from its recorded token usage."""
     price = PRICES.get(model)
     if price is None:

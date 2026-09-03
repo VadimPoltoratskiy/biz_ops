@@ -79,14 +79,24 @@ class LLMRetryExhaustedError(LLMError):
 # ---------------------------------------------------------------------------
 
 
-def _make_sync_client() -> anthropic.Anthropic:
-    """Construct and return a synchronous Anthropic client from the environment."""
-    return anthropic.Anthropic()
+def _make_sync_client(settings: Settings) -> anthropic.Anthropic:
+    """Construct and return a synchronous Anthropic client from settings."""
+    if not settings.api_key:
+        raise LLMAuthError(
+            "No API key configured. Set ANTHROPIC_API_KEY in .env or "
+            "as an environment variable."
+        )
+    return anthropic.Anthropic(api_key=settings.api_key)
 
 
-def _make_async_client() -> anthropic.AsyncAnthropic:
-    """Construct and return an asynchronous Anthropic client from the environment."""
-    return anthropic.AsyncAnthropic()
+def _make_async_client(settings: Settings) -> anthropic.AsyncAnthropic:
+    """Construct and return an asynchronous Anthropic client from settings."""
+    if not settings.api_key:
+        raise LLMAuthError(
+            "No API key configured. Set ANTHROPIC_API_KEY in .env or "
+            "as an environment variable."
+        )
+    return anthropic.AsyncAnthropic(api_key=settings.api_key)
 
 
 # ---------------------------------------------------------------------------
@@ -165,7 +175,7 @@ def extract_rules(
 
     for attempt in range(settings.max_retries + 1):
         try:
-            client = _make_sync_client()
+            client = _make_sync_client(settings)
             # Streamed because the budget is large: a full regulation yields a long
             # rules array, and adaptive thinking tokens are drawn from the SAME
             # max_tokens budget. At 8192 the response was truncated mid-string, which
@@ -210,6 +220,10 @@ def extract_rules(
         # Our own fail-fast errors (e.g. the truncation guard above) must not be
         # swallowed by the generic retry handler below and re-attempted.
         except LLMBadRequestError:
+            raise
+
+        # Key guard raised by factory must propagate immediately, not be retried.
+        except LLMAuthError:
             raise
 
         except Exception as exc:
@@ -292,6 +306,12 @@ async def evaluate_rule(
 
             except BadRequestError as exc:
                 raise LLMBadRequestError(str(exc)) from exc
+
+            # Defensive: re-raise immediately so a future refactor that moves
+            # _make_async_client inside this loop cannot accidentally retry on a
+            # missing key.
+            except LLMAuthError:
+                raise
 
             except Exception as exc:
                 category = _classify_exception(exc)

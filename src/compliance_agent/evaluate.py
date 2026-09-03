@@ -97,7 +97,7 @@ async def _run_all(
 ) -> tuple[list[VerdictResponse], list[TokenUsage]]:
     """Async implementation of ``evaluate_all_rules``."""
     semaphore = asyncio.Semaphore(settings.max_concurrency)
-    client = llm._make_async_client()
+    client = llm._make_async_client(settings)
 
     try:
         coroutines = [
