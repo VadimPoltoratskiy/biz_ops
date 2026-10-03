@@ -1,0 +1,1095 @@
+{
+  "source_id": "fca-cobs-4-financial-promotions",
+  "source_hash": "52970dd72432cd902fcef599933318bf256b328606e00eabdfd1a8f42788589f",
+  "retrieved_date": "2026-09-03",
+  "extracted_at": "2026-09-03T16:53:37.193339+00:00",
+  "rules": [
+    {
+      "rule_id": "COBS-4.2.1R-prohibition-1",
+      "citation": "COBS 4.2.1 [R] (effective 01/10/2018)",
+      "source_quote": "A firm must ensure that a communication or a financial promotion is fair, clear and not misleading.",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text contain any claim or implication that is false, exaggerated, or likely to create a false impression of an investment's risks or returns?",
+      "precondition": "Always applicable to any financial promotion or communication to a client.",
+      "severity": "high",
+      "failure_indicators": [
+        "claims investors will definitely make money",
+        "uses the word 'guaranteed' without qualification",
+        "omits or minimises significant risks while emphasising returns",
+        "uses phrases like 'risk-free' or 'certain gains'",
+        "presents past performance as indicative of future results without caveat"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.4G-balance-1",
+      "citation": "COBS 4.2.4 [G] (effective 01/04/2013)",
+      "source_quote": "for a product or service that places a client's capital at risk makes this clear;",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text promote a product that puts capital at risk without clearly stating that the client's capital is at risk?",
+      "precondition": "Applies when the marketing text promotes a product or service that places the client's capital at risk.",
+      "severity": "medium",
+      "failure_indicators": [
+        "no 'capital at risk' statement anywhere in the text",
+        "describes an investment product with no mention that money can be lost",
+        "emphasises returns with no reference to possible loss of capital",
+        "uses 'safe' or 'secure' about an at-risk investment"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.4G-balance-2",
+      "citation": "COBS 4.2.4 [G] (effective 01/04/2013)",
+      "source_quote": "that quotes a yield figure gives a balanced impression of both the short and long term prospects for the investment;",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text quote a yield figure without giving a balanced impression of both the short-term and long-term prospects for the investment?",
+      "precondition": "Applies only when the marketing text quotes a yield figure.",
+      "severity": "medium",
+      "failure_indicators": [
+        "quotes a headline yield such as '8% yield' with no discussion of prospects",
+        "presents a yield without mentioning that yields can fall",
+        "shows only short-term yield with no longer-term context",
+        "implies the quoted yield will persist indefinitely"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.4G-mandatory_disclosure-3",
+      "citation": "COBS 4.2.4 [G] (effective 01/04/2013)",
+      "source_quote": "that promotes an investment or service whose charging structure is complex, or in relation to which the firm will receive more than one element of remuneration, includes the information necessary to ensure that it is fair, clear and not misleading and contains sufficient information taking into account the needs of the recipients;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text promote an investment or service with a complex or multi-element charging structure without including sufficient information about those charges?",
+      "precondition": "Applies when the marketing text promotes an investment or service with a complex charging structure or multiple elements of remuneration.",
+      "severity": "medium",
+      "failure_indicators": [
+        "mentions fees only as 'fees may apply' with no detail",
+        "refers to multiple charge types without explaining them",
+        "promotes 'zero commission' while other charges exist and are unexplained",
+        "no mention of charges at all despite a complex fee structure"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.4G-mandatory_disclosure-4",
+      "citation": "COBS 4.2.4 [G] (effective 01/04/2013)",
+      "source_quote": "that names the FCA , PRA or both as its regulator and refers to matters not regulated by either the FCA , PRA or both makes clear that those matters are not regulated by the FCA , PRA or either;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text name the FCA or PRA as its regulator while also referring to unregulated matters, without making clear that those matters are not regulated?",
+      "precondition": "Applies only when the marketing text names the FCA and/or PRA as regulator and also refers to activities or products not regulated by them.",
+      "severity": "medium",
+      "failure_indicators": [
+        "states 'authorised and regulated by the FCA' alongside unregulated products with no carve-out",
+        "lists regulated and unregulated services together without distinction",
+        "no statement such as 'this activity is not regulated by the FCA'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.4G-balance-5",
+      "citation": "COBS 4.2.4 [G] (effective 01/04/2013)",
+      "source_quote": "that offers packaged products or stakeholder products not produced by the firm , gives a fair, clear and not misleading impression of the producer of the product or the manager of the underlying investments.",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text offer a packaged or stakeholder product produced by another party while giving a misleading or unclear impression of who produces the product or manages the underlying investments?",
+      "precondition": "Applies only when the marketing text offers packaged products or stakeholder products not produced by the promoting firm.",
+      "severity": "medium",
+      "failure_indicators": [
+        "implies the promoting firm manages the underlying investments when a third party does",
+        "omits the name of the actual product producer",
+        "uses the promoting firm's branding in a way that obscures the third-party producer"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.2.5G-prohibition-1",
+      "citation": "COBS 4.2.5 [G] (effective 25/04/2013)",
+      "source_quote": "A communication or a financial promotion should not describe a feature of a product or service as “guaranteed”, “protected” or “secure”, or use a similar term unless: (1) that term is capable of being a fair, clear and not misleading description of it; and (2) the firm communicates all of the information necessary, and presents that information with sufficient clarity and prominence, to make the use of that term fair, clear and not misleading.",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text describe a product feature as 'guaranteed', 'protected', 'secure' or a similar term without prominently including all the information needed to make that description fair, clear and not misleading?",
+      "precondition": "Applies only when the marketing text describes a feature of a product or service as guaranteed, protected, secure, or uses a similar term.",
+      "severity": "medium",
+      "failure_indicators": [
+        "uses the word 'guaranteed'",
+        "uses the word 'protected'",
+        "uses the word 'secure' or 'safe'",
+        "uses 'capital protected' with no explanation of conditions or limits",
+        "uses 'no risk of loss' style wording"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.3.1R-identification-1",
+      "citation": "COBS 4.3.1 [R] (effective 19/01/2026)",
+      "source_quote": "A firm must ensure that a financial promotion addressed to a client is clearly identifiable as such.",
+      "obligation_type": "identification",
+      "check_question": "Is there anything in the marketing text making it clearly identifiable as a financial promotion or advertisement, rather than appearing as neutral news, editorial or educational content?",
+      "precondition": "Applies to any financial promotion addressed to a client (other than excluded communications, image advertising or non-retail communications).",
+      "severity": "high",
+      "failure_indicators": [
+        "no label such as 'advertisement', 'financial promotion' or 'sponsored'",
+        "written in the style of a news article or independent research",
+        "presented as personal opinion or organic social media post without disclosure",
+        "disguises promotional intent as educational content"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-identification-1",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "A firm must ensure that the information in (1): (a) includes the name of the firm ;",
+      "obligation_type": "identification",
+      "check_question": "Does the marketing text include the name of the firm communicating it?",
+      "precondition": "Applies to information, including marketing communications, addressed to or likely to be received by a retail or professional client in relation to MiFID, equivalent third country or optional exemption business.",
+      "severity": "high",
+      "failure_indicators": [
+        "no firm or trading name appears anywhere in the text",
+        "only a product name is given with no identifiable provider",
+        "anonymous promotional copy with contact link only"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-balance-2",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "is accurate and always gives a fair and prominent indication of any relevant risks when referencing any potential benefits of an investment service or financial instrument ;",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text reference potential benefits of an investment service or financial instrument without giving a fair and prominent indication of the relevant risks?",
+      "precondition": "Applies whenever the marketing text references potential benefits of an investment service or financial instrument.",
+      "severity": "high",
+      "failure_indicators": [
+        "lists benefits and returns with no risk statement",
+        "risk information buried in small print or a footnote",
+        "mentions 'high returns' with no counterbalancing risk warning",
+        "risk wording is vague such as 'terms apply' rather than describing actual risks"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-presentation-3",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "uses a font size in the indication of relevant risks that is at least equal to the predominant font size used throughout the information provided, as well as a layout that ensures that such indication is prominent;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text present the indication of relevant risks in a font size smaller than the predominant font size, or in a layout that makes the risk indication non-prominent?",
+      "precondition": "Applies whenever the marketing text includes an indication of relevant risks.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk warning in small print or footnote text",
+        "risk statement placed at the very bottom in reduced font",
+        "benefits in large bold headline while risks in fine print",
+        "risk text greyed out or low contrast"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-presentation-4",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "is sufficient for, and presented in a way that is likely to be understood by, the average member of the group to whom it is directed, or by whom it is likely to be received;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text rely on jargon, technical terms or complex wording that the average intended retail recipient would be unlikely to understand?",
+      "precondition": "Applies to all information and marketing communications addressed to retail or professional clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "unexplained technical jargon such as 'delta hedged overlay' or 'gamma exposure'",
+        "undefined acronyms",
+        "dense legalistic sentences aimed at a retail audience",
+        "key terms used without any plain-English explanation"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-presentation-5",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "does not disguise, diminish or obscure important items, statements or warnings,",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text disguise, diminish or obscure any important item, statement or warning?",
+      "precondition": "Always applicable to marketing communications covered by COBS 4.5A.",
+      "severity": "high",
+      "failure_indicators": [
+        "important warnings hidden behind a 'read more' link",
+        "key limitations expressed only in an asterisked footnote",
+        "qualifying conditions written in markedly smaller text",
+        "warning text placed among unrelated legal boilerplate"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-presentation-6",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "is consistently presented in the same language throughout all forms of information and marketing materials that are provided to each client , unless the client has agreed to receive information in more than one language;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text mix different languages such that it is not consistently presented in a single language?",
+      "precondition": "Applies to marketing communications provided to clients under COBS 4.5A.",
+      "severity": "high",
+      "failure_indicators": [
+        "body copy in English but risk warning in another language",
+        "key disclosures in a different language from the promotional headline",
+        "untranslated foreign-language terms in the disclosure section"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.3R-mandatory_disclosure-7",
+      "citation": "COBS 4.5A.3 [R] (effective 23/10/2025)",
+      "source_quote": "is up-to-date and relevant to the means of communication used.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text contain information that is visibly out of date, such as stale figures, expired offers or superseded dates?",
+      "precondition": "Applies to all marketing communications covered by COBS 4.5A.",
+      "severity": "high",
+      "failure_indicators": [
+        "quotes rates or figures 'as at' a date long past",
+        "references an offer deadline that has already passed",
+        "cites data with no date or from an obviously outdated period"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.7R-balance-1",
+      "citation": "COBS 4.5A.7 [R] (effective 23/10/2025)",
+      "source_quote": "the comparison is meaningful and presented in a fair and balanced way;",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text make a comparison between investment services, financial instruments or providers that is not meaningful or is presented in a one-sided or unbalanced way?",
+      "precondition": "Applies only when the marketing text compares investment/ancillary services, financial instruments, or providers of such services.",
+      "severity": "high",
+      "failure_indicators": [
+        "compares only favourable metrics against competitors",
+        "cherry-picks a time period that flatters the promoted product",
+        "compares products of materially different risk profiles as if equivalent",
+        "claims 'better than' a rival with no like-for-like basis"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.7R-substantiation-2",
+      "citation": "COBS 4.5A.7 [R] (effective 23/10/2025)",
+      "source_quote": "the sources of the information used for the comparison are specified;",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text make a comparison without specifying the sources of the information used for that comparison?",
+      "precondition": "Applies only when the marketing text compares investment/ancillary services, financial instruments, or providers of such services.",
+      "severity": "high",
+      "failure_indicators": [
+        "states 'we beat the market average' with no source cited",
+        "uses phrases like 'independent research shows' without naming the research",
+        "comparison table with no data source attribution"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.7R-substantiation-3",
+      "citation": "COBS 4.5A.7 [R] (effective 23/10/2025)",
+      "source_quote": "the key facts and assumptions used to make the comparison are included.",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text make a comparison without including the key facts and assumptions on which the comparison is based?",
+      "precondition": "Applies only when the marketing text compares investment/ancillary services, financial instruments, or providers of such services.",
+      "severity": "high",
+      "failure_indicators": [
+        "no stated time period for the comparison",
+        "no explanation of whether charges are included in the compared figures",
+        "no statement of the assumptions behind projected savings claims",
+        "comparison of 'costs' without stating what is counted as a cost"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.8R-mandatory_disclosure-1",
+      "citation": "COBS 4.5A.8 [R] (effective 23/10/2025)",
+      "source_quote": "If any information refers to a particular tax treatment, a firm must ensure that it prominently states that the tax treatment depends on the individual circumstances of each client and may be subject to change in the future.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text refer to a particular tax treatment without prominently stating that tax treatment depends on individual circumstances and may change in future?",
+      "precondition": "Applies only when the marketing text refers to a particular tax treatment (e.g. tax-free, ISA, tax relief).",
+      "severity": "high",
+      "failure_indicators": [
+        "says 'tax-free returns' with no caveat",
+        "mentions 'ISA' or 'tax relief' without the individual-circumstances caveat",
+        "tax caveat present only in tiny footnote text",
+        "claims tax benefits as permanent or certain"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-presentation-1",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "that indication is not the most prominent feature of the communication;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text make an indication of past performance the most prominent feature of the communication (e.g. the headline or dominant visual)?",
+      "precondition": "Applies only when the marketing text contains an indication of past performance of a financial instrument, financial index or investment service.",
+      "severity": "high",
+      "failure_indicators": [
+        "headline is a past return figure such as '+42% last year'",
+        "largest text on the page is a performance number",
+        "past performance chart dominates the layout",
+        "opening sentence leads with historical returns"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-mandatory_disclosure-2",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "the information includes appropriate performance information which covers the preceding 5 years, or the whole period for which the financial instrument has been offered, the financial index has been established, or the investment service has been provided (where less than 5 years), or such longer period as the firm may decide, and in every case that performance information is based on complete 12-month periods;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text show past performance covering less than the preceding 5 years (or the whole shorter life of the product) or over periods that are not complete 12-month periods?",
+      "precondition": "Applies only when the marketing text contains an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "shows only a single year or 'year to date' return",
+        "quotes performance over an arbitrary period such as 'the last 18 months'",
+        "shows 3-year performance for a product that has existed for 5+ years",
+        "cites only 'since launch' cumulative figure with no annual periods"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-mandatory_disclosure-3",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "the reference period and the source of information are clearly stated;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance without clearly stating the reference period and the source of the performance information?",
+      "precondition": "Applies only when the marketing text contains an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "performance figure with no dates attached",
+        "no data source named for performance figures",
+        "chart with unlabelled time axis",
+        "vague wording such as 'recent returns'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-mandatory_disclosure-4",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "the information contains a prominent warning that the figures refer to the past and that past performance is not a reliable indicator of future results;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance without a prominent warning that the figures refer to the past and that past performance is not a reliable indicator of future results?",
+      "precondition": "Applies only when the marketing text contains an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "no 'past performance is not a reliable indicator of future results' warning",
+        "warning present only in tiny footnote text",
+        "implies past returns will be repeated",
+        "says 'proven track record of returns' with no past-performance caveat"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-mandatory_disclosure-5",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "if the indication relies on figures denominated in a currency other than pounds sterling, the currency is clearly stated, together with a warning that the return may increase or decrease as a result of currency fluctuations;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance in a non-sterling currency without clearly stating the currency and warning that returns may increase or decrease due to currency fluctuations?",
+      "precondition": "Applies only when past performance figures in the marketing text are denominated in a currency other than pounds sterling.",
+      "severity": "high",
+      "failure_indicators": [
+        "performance quoted in USD or EUR with no currency-fluctuation warning",
+        "currency symbol omitted or ambiguous",
+        "no mention of exchange-rate risk alongside foreign-currency returns"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.10R-mandatory_disclosure-6",
+      "citation": "COBS 4.5A.10 [R] (effective 23/10/2025)",
+      "source_quote": "if the indication is based on gross performance, the effect of commissions, fees or other charges is disclosed.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present gross past performance figures without disclosing the effect of commissions, fees or other charges?",
+      "precondition": "Applies only when the past performance shown in the marketing text is on a gross basis.",
+      "severity": "high",
+      "failure_indicators": [
+        "states 'gross returns' with no mention of fees",
+        "performance figures presented 'before charges' with no explanation of charge impact",
+        "no reference to fees anywhere alongside performance figures"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.12R-mandatory_disclosure-1",
+      "citation": "COBS 4.5A.12 [R] (effective 23/10/2025)",
+      "source_quote": "the information contains a prominent warning that the figures refer to simulated past performance and that past performance is not a reliable indicator of future performance.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present simulated or backtested past performance without a prominent warning that the figures are simulated and that past performance is not a reliable indicator of future performance?",
+      "precondition": "Applies only when the marketing text contains an indication of simulated past performance (e.g. backtested or modelled historical returns).",
+      "severity": "high",
+      "failure_indicators": [
+        "uses 'backtested' or 'simulated' results with no warning",
+        "presents modelled historical returns as if actual",
+        "no statement that figures refer to simulated past performance",
+        "hypothetical growth chart with no simulation caveat"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.12R-substantiation-2",
+      "citation": "COBS 4.5A.12 [R] (effective 23/10/2025)",
+      "source_quote": "the simulated past performance is based on the actual past performance of one or more financial instruments or financial indices which are the same as, or substantially the same as, or underlie, the financial instrument concerned;",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text present simulated past performance without indicating that it is based on the actual past performance of the same, substantially the same, or underlying instruments or indices?",
+      "precondition": "Applies only when the marketing text contains an indication of simulated past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "backtest based on an unrelated or unnamed benchmark",
+        "no explanation of what the simulation is derived from",
+        "simulated figures presented for a product with no underlying track record"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.14R-prohibition-1",
+      "citation": "COBS 4.5A.14 [R] (effective 23/10/2025)",
+      "source_quote": "it is not based on and does not refer to simulated past performance;",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text base or support an indication of future performance on simulated past performance?",
+      "precondition": "Applies only when the marketing text contains an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "projects future returns from a backtested track record",
+        "says 'based on our simulated model, expect X% next year'",
+        "forecast explicitly derived from hypothetical historical data"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.14R-substantiation-2",
+      "citation": "COBS 4.5A.14 [R] (effective 23/10/2025)",
+      "source_quote": "it is based on reasonable assumptions supported by objective data;",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text make an indication of future performance without setting out reasonable assumptions supported by objective data?",
+      "precondition": "Applies only when the marketing text contains an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "states 'expect 12% p.a.' with no basis given",
+        "forecast with no stated assumptions",
+        "projection sourced only to internal opinion or 'our experts believe'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.14R-mandatory_disclosure-3",
+      "citation": "COBS 4.5A.14 [R] (effective 23/10/2025)",
+      "source_quote": "where the information is based on gross performance, the effect of commissions, fees or other charges is disclosed;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present a gross future performance projection without disclosing the effect of commissions, fees or other charges?",
+      "precondition": "Applies only when the marketing text contains a gross indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "projected returns 'before fees' with no charge impact explained",
+        "forecast figures with no mention of costs",
+        "'you could earn X' with no deduction of charges noted"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.14R-balance-4",
+      "citation": "COBS 4.5A.14 [R] (effective 23/10/2025)",
+      "source_quote": "it is based on performance scenarios in different market conditions (both negative and positive scenarios), and reflects the nature and risks of the specific types of instruments included in the analysis;",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text present future performance using only positive scenarios, without also showing negative market-condition scenarios?",
+      "precondition": "Applies only when the marketing text contains an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "shows only an optimistic growth projection",
+        "single 'expected return' figure with no downside scenario",
+        "projection chart rising only, with no loss scenario",
+        "no mention of what happens in falling markets"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.14R-mandatory_disclosure-5",
+      "citation": "COBS 4.5A.14 [R] (effective 23/10/2025)",
+      "source_quote": "it contains a prominent warning that such forecasts are not a reliable indicator of future performance.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text contain a forecast or projection of future performance without a prominent warning that such forecasts are not a reliable indicator of future performance?",
+      "precondition": "Applies only when the marketing text contains an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "projection given with no forecast caveat",
+        "warning buried in small print",
+        "projected returns described as 'expected' or 'targeted' with no disclaimer"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.16R-prohibition-1",
+      "citation": "COBS 4.5A.16 [R] (effective 23/10/2025)",
+      "source_quote": "The information must not use the name of the FCA or PRA in such a way that would indicate or suggest endorsement or approval by the FCA or PRA of the products or services of the firm .",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text use the name of the FCA or PRA in a way that indicates or suggests endorsement or approval of the firm's products or services?",
+      "precondition": "Applies only when the marketing text mentions the FCA or PRA.",
+      "severity": "high",
+      "failure_indicators": [
+        "says 'FCA approved product'",
+        "says 'endorsed by the FCA'",
+        "implies the regulator vouches for returns or safety",
+        "uses the FCA logo or name next to a product claim to imply approval"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.17R-mandatory_disclosure-1",
+      "citation": "COBS 4.5A.17 [R] (effective 30/09/2020)",
+      "source_quote": "A firm must ensure that the following risk warning is given: “[Name of fund] invests in assets that may at times be hard to sell. This means that there may be occasions when you experience a delay or receive less than you might otherwise expect when selling your investment. For more information on risks, see the prospectus and key investor information document.”",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text for a fund investing in inherently illiquid assets include the prescribed illiquid-assets risk warning in the specified wording?",
+      "precondition": "Applies only to a financial promotion relating to a fund investing in inherently illiquid assets (FIIA) addressed to or likely to be received by a retail client, other than the fund's prospectus.",
+      "severity": "high",
+      "failure_indicators": [
+        "no statement that the fund invests in assets that may at times be hard to sell",
+        "no mention of possible delay in selling the investment",
+        "no reference to the prospectus and key investor information document",
+        "paraphrased or truncated version of the prescribed warning"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.5A.17R-presentation-2",
+      "citation": "COBS 4.5A.17 [R] (effective 30/09/2020)",
+      "source_quote": "If the financial promotion is a non-real time financial promotion , the risk warning must be prominently placed in the financial promotion in a font size that is at least equal to the predominant font size used throughout the communication.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text place the FIIA illiquid-assets risk warning non-prominently or in a font size smaller than the predominant font size used in the communication?",
+      "precondition": "Applies only to a non-real time financial promotion relating to a fund investing in inherently illiquid assets addressed to retail clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "illiquidity warning in small print at the bottom",
+        "warning appended to legal boilerplate",
+        "warning font visibly smaller than body text"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-presentation-1",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "that indication is not the most prominent feature of the communication;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text make an indication of past performance the most prominent feature of the communication?",
+      "precondition": "Applies to non-MiFID financial promotions to retail clients that contain an indication of past performance of relevant business, a relevant investment or a financial index.",
+      "severity": "high",
+      "failure_indicators": [
+        "past return is the headline claim",
+        "performance figure in the largest font on the page",
+        "promotion leads with 'up 30% since launch'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-mandatory_disclosure-2",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "the information includes appropriate performance information which covers the preceding five years, or the whole period for which the investment has been offered, the financial index has been established, or the service has been provided (where less than five years, or such longer period as the firm may decide), and in every case that performance information must be based on complete 12-month periods;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text show past performance over a period shorter than the preceding five years (or the whole shorter life of the investment) or over periods that are not complete 12-month periods?",
+      "precondition": "Applies to non-MiFID financial promotions to retail clients containing an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "only one year of returns shown",
+        "partial-year or 'last 6 months' performance quoted",
+        "cherry-picked start and end dates not aligned to 12-month periods"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-mandatory_disclosure-3",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "the reference period and the source of information are clearly stated;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance without clearly stating the reference period and the source of the information?",
+      "precondition": "Applies to non-MiFID financial promotions to retail clients containing an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "no dates given for the performance figures",
+        "no named source for the data",
+        "undated performance chart"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-mandatory_disclosure-4",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "the information contains a prominent warning that the figures refer to the past and that past performance is not a reliable indicator of future results;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance without a prominent warning that the figures refer to the past and that past performance is not a reliable indicator of future results?",
+      "precondition": "Applies to non-MiFID financial promotions to retail clients containing an indication of past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "missing 'past performance is not a reliable indicator of future results' wording",
+        "caveat only in footnote or small print",
+        "suggests historical returns will continue"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-mandatory_disclosure-5",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "if the indication relies on figures denominated in a currency other than pounds sterling, the currency is clearly stated, together with a warning that the return may increase or decrease as a result of currency fluctuations;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance in a non-sterling currency without clearly stating the currency and warning that returns may increase or decrease as a result of currency fluctuations?",
+      "precondition": "Applies to non-MiFID retail financial promotions where past performance figures are denominated in a currency other than pounds sterling.",
+      "severity": "high",
+      "failure_indicators": [
+        "dollar or euro returns quoted with no currency risk warning",
+        "currency of the figures not identified",
+        "no mention of exchange rate effects"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.2R-mandatory_disclosure-6",
+      "citation": "COBS 4.6.2 [R] (effective 01/01/2021)",
+      "source_quote": "if the indication is based on gross performance, the effect of commissions, fees or other charges is disclosed.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present gross past performance without disclosing the effect of commissions, fees or other charges?",
+      "precondition": "Applies to non-MiFID retail financial promotions where past performance is shown on a gross basis.",
+      "severity": "high",
+      "failure_indicators": [
+        "'gross of fees' returns with no charges explanation",
+        "no reference to charges alongside performance",
+        "implies stated returns are what the investor receives"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.4BG-presentation-1",
+      "citation": "COBS 4.6.4B [G] (effective 06/04/2026)",
+      "source_quote": "The firm should present the information referred to in COBS 4.6.4 G no less prominently than any other past performance information.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text present the standardised five-year percentage growth past performance information less prominently than other past performance information shown?",
+      "precondition": "Applies when a non-MiFID retail financial promotion includes standardised past performance information for a scheme or unit-linked product alongside other performance information.",
+      "severity": "medium",
+      "failure_indicators": [
+        "headline cumulative return larger than the standardised annual table",
+        "standardised 12-month period figures relegated to a footnote",
+        "selective performance figures shown more prominently than the full table"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.4AG-mandatory_disclosure-1",
+      "citation": "COBS 4.6.4A [G] (effective 01/11/2007)",
+      "source_quote": "For products with performance data for fewer than five 12-month periods, firms should clearly indicate that performance data does not exist for the relevant periods.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text show fewer than five complete 12-month periods of past performance without clearly indicating that performance data does not exist for the missing periods?",
+      "precondition": "Applies when a non-MiFID retail financial promotion shows past performance for fewer than five complete 12-month periods.",
+      "severity": "medium",
+      "failure_indicators": [
+        "performance table with blank or omitted earlier years and no explanation",
+        "only two or three years shown with no note about data availability",
+        "no statement that the product has a shorter track record"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.5G-mandatory_disclosure-1",
+      "citation": "COBS 4.6.5 [G] (effective 06/04/2026)",
+      "source_quote": "an offer to bid basis (which should be stated) if there is an actual return or comparison of performance with other investments ; or",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present past performance for a packaged product without stating the pricing basis (e.g. offer to bid, bid to bid, offer to offer, or single pricing) used?",
+      "precondition": "Applies when a non-MiFID retail financial promotion presents past performance of a non-CCI packaged product other than a scheme or unit-linked product.",
+      "severity": "medium",
+      "failure_indicators": [
+        "performance figures with no stated pricing basis",
+        "comparison with an index without saying which pricing basis was used",
+        "no mention of whether charges are allowed for in a single-priced basis"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.6R-mandatory_disclosure-1",
+      "citation": "COBS 4.6.6 [R] (effective 03/01/2018)",
+      "source_quote": "the information contains a prominent warning that the figures refer to simulated past performance and that past performance is not a reliable indicator of future performance.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present simulated past performance without a prominent warning that the figures refer to simulated past performance and that past performance is not a reliable indicator of future performance?",
+      "precondition": "Applies to non-MiFID retail financial promotions containing an indication of simulated past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "backtested figures shown with no simulation warning",
+        "'hypothetical returns' with no caveat",
+        "simulated chart labelled as performance without qualification"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.6R-substantiation-2",
+      "citation": "COBS 4.6.6 [R] (effective 03/01/2018)",
+      "source_quote": "the simulated past performance is based on the actual past performance of one or more investments or financial indices which are the same as, substantially the same as, or underlie, the investment concerned;",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text present simulated past performance without indicating that it derives from the actual past performance of the same, substantially the same, or underlying investments or indices?",
+      "precondition": "Applies to non-MiFID retail financial promotions containing an indication of simulated past performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "simulation with no identified underlying investment or index",
+        "modelled returns based on an unrelated proxy",
+        "no basis stated for the simulated figures"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.7R-prohibition-1",
+      "citation": "COBS 4.6.7 [R] (effective 03/01/2018)",
+      "source_quote": "it is not based on and does not refer to simulated past performance;",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text base or support an indication of future performance on simulated past performance?",
+      "precondition": "Applies to non-MiFID retail financial promotions relating to a financial instrument or structured deposit containing an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "forecast built from backtested data",
+        "'our simulation shows future returns of X%'",
+        "refers to hypothetical history to justify a projection"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.7R-substantiation-2",
+      "citation": "COBS 4.6.7 [R] (effective 03/01/2018)",
+      "source_quote": "it is based on reasonable assumptions supported by objective data;",
+      "obligation_type": "substantiation",
+      "check_question": "Does the marketing text present a future performance indication without reasonable assumptions supported by objective data being set out?",
+      "precondition": "Applies to non-MiFID retail financial promotions relating to a financial instrument or structured deposit containing an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "unsupported projected return figure",
+        "no assumptions disclosed for the forecast",
+        "projection justified only by firm opinion"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.7R-mandatory_disclosure-3",
+      "citation": "COBS 4.6.7 [R] (effective 03/01/2018)",
+      "source_quote": "where the indication is based on gross performance, the effect of commissions, fees or other charges is disclosed;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text present a gross future performance indication without disclosing the effect of commissions, fees or other charges?",
+      "precondition": "Applies to non-MiFID retail financial promotions containing a gross indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "projected gross yield with no fee impact stated",
+        "'you could receive X' before charges with no explanation",
+        "no mention of charges alongside a forecast"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.7R-balance-4",
+      "citation": "COBS 4.6.7 [R] (effective 03/01/2018)",
+      "source_quote": "it is based on performance scenarios in different market conditions (both negative and positive scenarios), and reflects the nature and risks of the specified types of investments included in the analysis; and",
+      "obligation_type": "balance",
+      "check_question": "Does the marketing text present future performance using only favourable scenarios, without also presenting negative market-condition scenarios?",
+      "precondition": "Applies to non-MiFID retail financial promotions containing an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "single upside projection only",
+        "no downside or stress scenario shown",
+        "growth illustration with no loss illustration"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.7R-mandatory_disclosure-5",
+      "citation": "COBS 4.6.7 [R] (effective 03/01/2018)",
+      "source_quote": "it contains a prominent warning that such forecasts are not a reliable indicator of future performance.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text contain a future performance forecast without a prominent warning that such forecasts are not a reliable indicator of future performance?",
+      "precondition": "Applies to non-MiFID retail financial promotions containing an indication of future performance.",
+      "severity": "high",
+      "failure_indicators": [
+        "projection with no disclaimer",
+        "forecast caveat only in small print",
+        "presents target returns as dependable"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.6.9R-prohibition-1",
+      "citation": "COBS 4.6.9 [R] (effective 06/02/2008)",
+      "source_quote": "A firm must not communicate a projection for a highly volatile product to a client unless the product is a financial instrument .",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text include a projection of returns for a highly volatile product that is not a financial instrument?",
+      "precondition": "Applies only when the marketing text contains a projection for a highly volatile product.",
+      "severity": "high",
+      "failure_indicators": [
+        "projected returns given for a highly volatile non-financial-instrument product",
+        "illustrative future values for a speculative, volatile product",
+        "forecast figures attached to a product described as highly volatile"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.7R-prohibition-1",
+      "citation": "COBS 4.12A.7 [R] (effective 02/04/2024)",
+      "source_quote": "A firm must not communicate or approve a financial promotion which relates to a restricted mass market investment and which offers to a retail client any monetary or non-monetary incentive.",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text for a restricted mass market investment offer any monetary or non-monetary incentive to a retail client (such as a bonus, cashback, free gift, refer-a-friend reward or discount linked to trading volumes)?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments (e.g. non-readily realisable securities, P2P agreements, LTAF units, qualifying cryptoassets) addressed to retail clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "offers a sign-up bonus for investing",
+        "offers cashback on investment",
+        "offers a refer-a-friend reward",
+        "offers a free gift such as a laptop, phone or free shares",
+        "offers discounts or rebates linked to trading volume"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.9AG-prohibition-2",
+      "citation": "COBS 4.12A.9A [G] (effective 02/04/2024)",
+      "source_quote": "A benefit which is only available for a fixed period of time, or is contingent upon investing in a restricted mass market investment in the future, is likely to constitute an incentive.",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text for a restricted mass market investment offer a benefit that is time-limited or contingent on future investment (e.g. a limited-time offer or reward for investing by a deadline)?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments to retail clients that offer some benefit.",
+      "severity": "medium",
+      "failure_indicators": [
+        "'offer ends Friday' style time-limited benefit",
+        "'invest before the tax year end and receive X'",
+        "benefit contingent on making a further investment",
+        "'limited time only bonus'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.9AG-prohibition-3",
+      "citation": "COBS 4.12A.9A [G] (effective 02/04/2024)",
+      "source_quote": "A benefit which is only available to retail clients who invest through a particular medium is likely to constitute an incentive – for example, a benefit which is only offered to retail clients who invest via a social media link.",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text for a restricted mass market investment offer a benefit available only to clients who invest through a particular medium, such as via a social media link or specific app?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments to retail clients that offer a benefit tied to a channel.",
+      "severity": "medium",
+      "failure_indicators": [
+        "'sign up via this link for an exclusive bonus'",
+        "'app-only reward for investing'",
+        "benefit conditional on using a specific referral code"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.10R-mandatory_disclosure-1",
+      "citation": "COBS 4.12A.10 [R] (effective 01/02/2023)",
+      "source_quote": "A firm must not communicate or approve a financial promotion which relates to a restricted mass market investment unless it contains a risk warning that complies with COBS 4.12A.11R .",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text relating to a restricted mass market investment contain a risk warning at all?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments communicated to retail clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "no risk warning anywhere in the promotion",
+        "only a generic 'investments can go down as well as up' line instead of the prescribed warning",
+        "risk warning omitted from a social media post promoting a high-risk investment"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-mandatory_disclosure-2",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "the following risk warning if the financial promotion relates to one or more non-readily realisable securities : Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk investment and you are unlikely to be protected if something goes wrong.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text relating to non-readily realisable securities contain the exact prescribed risk warning 'Don't invest unless you're prepared to lose all the money you invest. This is a high-risk investment and you are unlikely to be protected if something goes wrong.'?",
+      "precondition": "Applies only to financial promotions to retail clients relating to one or more non-readily realisable securities (e.g. unlisted shares, mini-bonds, equity crowdfunding).",
+      "severity": "high",
+      "failure_indicators": [
+        "prescribed wording missing entirely",
+        "warning paraphrased, e.g. 'capital at risk' instead of the prescribed text",
+        "omits 'you are unlikely to be protected if something goes wrong' without justification",
+        "warning altered to soften the message"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-mandatory_disclosure-3",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "the following risk warning if the financial promotion relates to one or more P2P agreements or P2P portfolios : Don’t invest unless you’re prepared to lose money. This is a high-risk investment. You may not be able to access your money easily and are unlikely to be protected if something goes wrong.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text relating to P2P agreements or P2P portfolios contain the exact prescribed P2P risk warning wording?",
+      "precondition": "Applies only to financial promotions to retail clients relating to one or more P2P agreements or P2P portfolios.",
+      "severity": "high",
+      "failure_indicators": [
+        "no P2P-specific risk warning present",
+        "missing 'You may not be able to access your money easily'",
+        "uses the non-readily realisable securities warning instead",
+        "reworded or shortened warning without the permitted short-form text"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-mandatory_disclosure-4",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "the following risk warning if the financial promotion relates to a unit in a long-term asset fund : This is a high-risk investment, and assets may take a long time to buy and sell. Only invest if you can wait (possibly several years) to get your money back. You do not have protection against poor performance.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text relating to units in a long-term asset fund contain the exact prescribed LTAF risk warning wording?",
+      "precondition": "Applies only to financial promotions to retail clients relating to a unit in a long-term asset fund.",
+      "severity": "high",
+      "failure_indicators": [
+        "no LTAF-specific risk warning",
+        "omits 'assets may take a long time to buy and sell'",
+        "omits 'You do not have protection against poor performance'",
+        "substitutes a generic risk statement"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-mandatory_disclosure-5",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "the following risk warning if the financial promotion relates to one or more qualifying cryptoassets or UK RIE cryptoasset exchange traded notes : Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text relating to qualifying cryptoassets or UK RIE cryptoasset exchange traded notes contain the exact prescribed cryptoasset risk warning wording?",
+      "precondition": "Applies only to financial promotions to retail clients relating to qualifying cryptoassets or UK RIE cryptoasset exchange traded notes.",
+      "severity": "high",
+      "failure_indicators": [
+        "crypto promotion with no risk warning",
+        "uses 'you are unlikely to be protected' instead of 'you should not expect to be protected'",
+        "paraphrased crypto warning",
+        "warning omitted from a crypto social media advert"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-mandatory_disclosure-6",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "the risk warning in (1) or (2) must also include a link: (i)  in the form of the text: Take 2 mins to learn more ;",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text for a restricted mass market investment communicated by digital medium include the link text 'Take 2 mins to learn more' alongside the risk warning?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments communicated via website, mobile application or other digital medium capable of incorporating a link.",
+      "severity": "high",
+      "failure_indicators": [
+        "digital risk warning with no 'Take 2 mins to learn more' link text",
+        "link labelled differently, e.g. 'find out more'",
+        "risk warning present but no link to a risk summary"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.11R-presentation-7",
+      "citation": "COBS 4.12A.11 [R] (effective 08/10/2025)",
+      "source_quote": "Where the number of characters contained in the risk warning in (1) exceeds the number of characters permitted by a third-party marketing provider:",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text use a shortened risk warning where there is no apparent character limit constraint requiring the short form?",
+      "precondition": "Applies only when the marketing text uses a short-form risk warning for a restricted mass market investment.",
+      "severity": "high",
+      "failure_indicators": [
+        "uses 'Don't invest unless you're prepared to lose all the money you invest.' alone in a full-length email or webpage",
+        "short-form warning used in a medium with no character limit",
+        "truncation of the full warning without justification"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.20R-mandatory_disclosure-1",
+      "citation": "COBS 4.12A.20 [R] (effective 03/07/2023)",
+      "source_quote": "[Client name], this is a high-risk investment. How would you feel if you lost the money you’re about to invest? Take 2 mins to learn more.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does a direct offer financial promotion text for a restricted mass market investment include the prescribed personalised risk warning naming the client and asking 'How would you feel if you lost the money you're about to invest?'?",
+      "precondition": "Applies only to direct offer financial promotions of restricted mass market investments (other than LTAF units) to retail clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "no personalised risk warning present",
+        "warning does not include the client's name",
+        "omits 'How would you feel if you lost the money you're about to invest?'",
+        "personalised warning reworded or softened"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.20R-mandatory_disclosure-2",
+      "citation": "COBS 4.12A.20 [R] (effective 03/07/2023)",
+      "source_quote": "[Client name], this is a high-risk investment, and assets may take a long time to buy and sell. Only invest if you can wait (possibly several years) to get your money back. You do not have protection against poor performance. Take 2 mins to learn more.",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does a direct offer financial promotion text for units in a long-term asset fund include the prescribed LTAF personalised risk warning naming the client and covering long holding periods and lack of protection against poor performance?",
+      "precondition": "Applies only to direct offer financial promotions relating to units in a long-term asset fund to retail clients.",
+      "severity": "high",
+      "failure_indicators": [
+        "no LTAF personalised risk warning",
+        "client name placeholder not populated",
+        "omits 'You do not have protection against poor performance'",
+        "omits 'Only invest if you can wait (possibly several years) to get your money back'"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.20R-mandatory_disclosure-3",
+      "citation": "COBS 4.12A.20 [R] (effective 03/07/2023)",
+      "source_quote": "the personalised risk warning in (1)(b) or (1A)(b) must be: (i) provided to the retail client omitting the words “Take 2 mins to learn more”; and",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does a non-digital direct offer financial promotion text include the words 'Take 2 mins to learn more' in the personalised risk warning when those words should be omitted?",
+      "precondition": "Applies only to direct offer financial promotions of restricted mass market investments communicated other than by website, mobile application or other digital medium.",
+      "severity": "high",
+      "failure_indicators": [
+        "printed or spoken promotion retains 'Take 2 mins to learn more'",
+        "link text included where no link can be activated"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.20R-presentation-4",
+      "citation": "COBS 4.12A.20 [R] (effective 03/07/2023)",
+      "source_quote": "be accompanied by an invitation to the retail client to specify whether they wish to: (i) leave the investment journey; or (ii) continue to receive the direct offer financial promotion .",
+      "obligation_type": "presentation",
+      "check_question": "Does the direct offer financial promotion text present the options to leave the investment journey or to continue with equal prominence?",
+      "precondition": "Applies only to direct offer financial promotions of restricted mass market investments to retail clients where the client is invited to continue or leave.",
+      "severity": "high",
+      "failure_indicators": [
+        "'Continue' shown as a large bold button while 'Leave' is a small grey text link",
+        "only a 'continue' option offered with no exit option",
+        "exit option hidden or requiring extra clicks"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.18R-presentation-1",
+      "citation": "COBS 4.12A.18 [R] (effective 03/07/2023)",
+      "source_quote": "The options in (1)(b) must be presented with equal prominence.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text present the post-cooling-off choice to leave the investment journey and to continue with unequal prominence?",
+      "precondition": "Applies only to direct offer financial promotions of restricted mass market investments (other than LTAF-only promotions) where the client is invited to continue after a cooling off period.",
+      "severity": "high",
+      "failure_indicators": [
+        "'Continue' emphasised in brand colour while 'Leave' is de-emphasised",
+        "only the continue option is visible without scrolling",
+        "leave option rendered in smaller font"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.36R-presentation-1",
+      "citation": "COBS 4.12A.36 [R] (effective 01/02/2023)",
+      "source_quote": "be prominent, taking into account the content, size and orientation of the financial promotion as a whole;",
+      "obligation_type": "presentation",
+      "check_question": "Is the required risk warning or risk summary in the marketing text prominent relative to the content, size and orientation of the promotion as a whole?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments that must carry a prescribed risk warning or risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk warning at the very end in small text",
+        "risk warning dwarfed by promotional imagery or headline",
+        "warning placed off-screen or below the fold"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.36R-presentation-2",
+      "citation": "COBS 4.12A.36 [R] (effective 01/02/2023)",
+      "source_quote": "except where the risk warning cannot be provided in writing, be clearly legible, contained within its own border and with bold and underlined text as indicated in COBS 4.12A.11R or COBS 4 Annex 1R .",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text present the required risk warning without its own border, or without the bold and underlined text formatting indicated in the rules?",
+      "precondition": "Applies only to written financial promotions of restricted mass market investments carrying a prescribed risk warning or risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk warning run into body copy with no border or box",
+        "no bold or underline formatting on the prescribed warning",
+        "warning text illegible due to size or styling"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.36R-presentation-3",
+      "citation": "COBS 4.12A.36 [R] (effective 01/02/2023)",
+      "source_quote": "be statically fixed and visible at the top of the screen, below anything else that also stays static, even when the retail client scrolls up or down the webpage;",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text for a website or mobile app place the required risk warning somewhere other than statically fixed and visible at the top of the screen?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments communicated by website or mobile application.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk warning appears only in the page footer",
+        "warning scrolls out of view",
+        "warning only shown on the landing page and not on linked product pages",
+        "warning displayed only after clicking a tab"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.38R-presentation-4",
+      "citation": "COBS 4.12A.38 [R] (effective 01/02/2023)",
+      "source_quote": "The financial promotion must not contain any design feature which has the intent or effect of reducing the visibility or prominence of the risk warning or risk summary.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text include any design feature — such as smaller font, faded text, low-contrast colours, bottom placement, or a required extra click — that reduces the visibility or prominence of the risk warning or risk summary?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments carrying a required risk warning or risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk warning font smaller than standard body text",
+        "faded or low-contrast risk warning text",
+        "risk warning embedded in legal boilerplate or contact details",
+        "full warning text only visible after clicking a link",
+        "risk warning coloured to blend with brand background"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.40R-presentation-5",
+      "citation": "COBS 4.12A.40 [R] (effective 03/07/2023)",
+      "source_quote": "statically fixed and visible in the middle of the screen; and (4) the main focus of the screen.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text present the digital personalised risk warning or risk summary somewhere other than statically fixed in the middle of the screen as the main focus?",
+      "precondition": "Applies only to digital direct offer financial promotions of restricted mass market investments requiring a personalised risk warning or risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "personalised warning shown as a small banner rather than a central pop-up",
+        "warning displayed at the edge of the screen",
+        "promotional content remains the visual focus over the warning"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.42R-presentation-6",
+      "citation": "COBS 4.12A.42 [R] (effective 01/02/2023)",
+      "source_quote": "The financial promotion must not contain any design feature which has the intent or effect of reducing the visibility or prominence of the personalised risk warning or risk summary.",
+      "obligation_type": "presentation",
+      "check_question": "Does the marketing text include any design feature that reduces the visibility or prominence of the personalised risk warning or risk summary?",
+      "precondition": "Applies only to direct offer financial promotions of restricted mass market investments carrying a personalised risk warning or risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "personalised warning in smaller font than surrounding text",
+        "warning requiring extra clicks to read in full",
+        "warning coloured the same as brand or background",
+        "warning placed at the bottom of the page"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.44R-mandatory_disclosure-1",
+      "citation": "COBS 4.12A.44 [R] (effective 03/07/2023)",
+      "source_quote": "(subject to COBS 4.12A.46R ) provide the risk summary as it appears in COBS 4 Annex 1R ; or",
+      "obligation_type": "mandatory_disclosure",
+      "check_question": "Does the marketing text provide a risk summary that departs from the prescribed Annex 1R wording, or that is not in plain English or would take substantially longer than around 2 minutes to read?",
+      "precondition": "Applies only where the financial promotion of a restricted mass market investment is required to include a risk summary.",
+      "severity": "high",
+      "failure_indicators": [
+        "risk summary heavily rewritten or abbreviated",
+        "risk summary omits key prescribed risk headings",
+        "risk summary written in technical jargon rather than plain English",
+        "risk summary of excessive length"
+      ]
+    },
+    {
+      "rule_id": "COBS-4.12A.1G-prohibition-1",
+      "citation": "COBS 4.12A.1 [G] (effective 02/04/2024)",
+      "source_quote": "The purpose of this rule ( COBS 4.12A.7R ) is to ensure that retail clients are not persuaded or incited to engage in investment activity relating to a restricted mass market investment other than by reference to the features of the investment activity that is the subject of the financial promotion .",
+      "obligation_type": "prohibition",
+      "check_question": "Does the marketing text seek to persuade retail clients to invest in a restricted mass market investment by reference to something other than the features of the investment itself (for example rewards, urgency, or social pressure)?",
+      "precondition": "Applies only to financial promotions of restricted mass market investments addressed to retail clients.",
+      "severity": "medium",
+      "failure_indicators": [
+        "urgency language such as 'don't miss out — only 2 days left'",
+        "appeals to fear of missing out rather than product features",
+        "celebrity or influencer endorsement as the main reason to invest",
+        "promotes the reward rather than the investment"
+      ]
+    }
+  ]
+}

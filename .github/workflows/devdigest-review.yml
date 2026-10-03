@@ -1,0 +1,50 @@
+# AI code review on every PR, ported from the skill-repo setup.
+#
+# The runner in .devdigest/runner/ is a self-contained bundle: it reads the
+# agent config in .devdigest/agents/, loads the skills that config names from
+# .devdigest/skills/, reviews the PR diff, and posts the result as a GitHub
+# review. The two skills here are this repo's own invariants — the pipeline
+# layering rules and the untrusted-input boundary around the marketing text —
+# not the Node/Fastify ones the bundle shipped with.
+#
+# Model choice lives in .devdigest/agents/security-reviewer.yaml, currently a
+# cheap OpenRouter model, so a review costs a fraction of a live eval.
+name: DevDigest Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Fork PRs do not receive secrets, so the runner would fail on a missing
+    # key rather than review anything. Skip instead of failing red.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run DevDigest Review
+        run: node .devdigest/runner/index.js
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEVDIGEST_POST_AS: github_review
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Upload DevDigest result
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: devdigest-result
+          path: devdigest-result.json
+          if-no-files-found: ignore
