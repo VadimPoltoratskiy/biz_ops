@@ -19,7 +19,7 @@ from compliance_agent.config import (
     runs_dir,
     source_path,
 )
-from compliance_agent.decompose import get_rules
+from compliance_agent.decompose import cache_path, get_rules
 from compliance_agent.evaluate import evaluate_all_rules
 from compliance_agent.ingest import (
     IngestionError,
@@ -27,7 +27,12 @@ from compliance_agent.ingest import (
     source_id_from_path,
     validate_marketing_text,
 )
-from compliance_agent.llm import LLMAuthError, LLMBadRequestError, LLMRetryExhaustedError
+from compliance_agent.llm import (
+    LLMAuthError,
+    LLMBadRequestError,
+    LLMRetryExhaustedError,
+    safe_error_detail,
+)
 from compliance_agent.models import (
     FailureCause,
     HistoryLine,
@@ -46,6 +51,7 @@ from compliance_agent.runlog import (
     append_history,
     create_run_dir,
     create_run_id,
+    write_rules_cache,
     write_run_artifacts,
 )
 
@@ -211,10 +217,18 @@ def run_check(marketing_text_raw: str, settings: Settings, refresh: bool) -> int
     # Stage 2 — Decomposition
     # -----------------------------------------------------------------------
     try:
-        artifact, _was_extracted, extraction_usage = get_rules(
+        artifact, was_extracted, extraction_usage = get_rules(
             source_text, source_id, rules_dir(root), settings, refresh
         )
         rules_used = artifact.rules
+
+        # The stage returns the artifact; persisting it is this module's job,
+        # so a read-only rules/ is a recorded stage failure rather than a
+        # traceback out of the middle of the stage.
+        if was_extracted:
+            write_rules_cache(
+                cache_path(rules_dir(root), source_id), artifact
+            )
 
         if not rules_used:
             _fail_stage(
@@ -231,7 +245,10 @@ def run_check(marketing_text_raw: str, settings: Settings, refresh: bool) -> int
             usages.append(extraction_usage)
 
     except (LLMAuthError, LLMBadRequestError) as exc:
-        _fail_stage(stages, "decomposition", "fail-fast-nonretryable", str(exc))
+        _fail_stage(
+            stages, "decomposition", "fail-fast-nonretryable",
+            safe_error_detail(exc),
+        )
         _save_incomplete_run(
             run_id, marketing_text_raw, source_id, rules_used, verdicts,
             stages, usages, run_dir, runs_base,
@@ -239,7 +256,10 @@ def run_check(marketing_text_raw: str, settings: Settings, refresh: bool) -> int
         return 2
 
     except LLMRetryExhaustedError as exc:
-        _fail_stage(stages, "decomposition", "retryable-exhausted", str(exc))
+        _fail_stage(
+            stages, "decomposition", "retryable-exhausted",
+            safe_error_detail(exc),
+        )
         _save_incomplete_run(
             run_id, marketing_text_raw, source_id, rules_used, verdicts,
             stages, usages, run_dir, runs_base,
@@ -247,7 +267,9 @@ def run_check(marketing_text_raw: str, settings: Settings, refresh: bool) -> int
         return 2
 
     except Exception as exc:
-        _fail_stage(stages, "decomposition", "internal-error", str(exc))
+        _fail_stage(
+            stages, "decomposition", "internal-error", safe_error_detail(exc)
+        )
         _save_incomplete_run(
             run_id, marketing_text_raw, source_id, rules_used, verdicts,
             stages, usages, run_dir, runs_base,
@@ -267,7 +289,9 @@ def run_check(marketing_text_raw: str, settings: Settings, refresh: bool) -> int
     except Exception as exc:
         # Per-rule failures are isolated inside evaluate_all_rules; this branch
         # handles an unexpected failure of the evaluation stage itself.
-        _fail_stage(stages, "evaluation", "internal-error", str(exc))
+        _fail_stage(
+            stages, "evaluation", "internal-error", safe_error_detail(exc)
+        )
         _save_incomplete_run(
             run_id, marketing_text_raw, source_id, rules_used, verdicts,
             stages, usages, run_dir, runs_base,
@@ -363,11 +387,16 @@ def run_extract_rules(settings: Settings, refresh: bool) -> int:
         artifact, was_extracted, _usage = get_rules(
             source_text, s_id, rules_dir(root), settings, refresh
         )
+        if was_extracted:
+            write_rules_cache(cache_path(rules_dir(root), s_id), artifact)
     except (LLMAuthError, LLMBadRequestError, LLMRetryExhaustedError) as exc:
         print(f"Error during extraction: {exc}", file=sys.stderr)
         return 2
     except Exception as exc:
-        print(f"Unexpected error during extraction: {exc}", file=sys.stderr)
+        print(
+            f"Unexpected error during extraction: {safe_error_detail(exc)}",
+            file=sys.stderr,
+        )
         return 2
 
     count = len(artifact.rules)

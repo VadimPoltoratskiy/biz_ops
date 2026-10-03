@@ -74,6 +74,26 @@ class LLMRetryExhaustedError(LLMError):
     """
 
 
+def safe_error_detail(exc: BaseException | None) -> str:
+    """
+    Describe an exception without echoing its message.
+
+    SDK exception strings can embed request context — headers, URL, and body
+    excerpts, which on an auth failure can include the rejected credential.
+    Stage details and error verdicts are persisted to ``run.json`` and printed
+    to stdout, so only the exception class and HTTP status may cross that
+    boundary. Messages this module raises itself are already written to be
+    safe, so they are passed through intact.
+    """
+    if exc is None:
+        return "unknown error"
+    if isinstance(exc, LLMError):
+        return str(exc)
+    name = type(exc).__name__
+    status = getattr(exc, "status_code", None)
+    return f"{name} (HTTP {status})" if status is not None else name
+
+
 # ---------------------------------------------------------------------------
 # Client factories (patched in tests)
 # ---------------------------------------------------------------------------
@@ -212,10 +232,10 @@ def extract_rules(
             return (response.parsed_output, usage)
 
         except (AuthenticationError, NotFoundError) as exc:
-            raise LLMAuthError(str(exc)) from exc
+            raise LLMAuthError(safe_error_detail(exc)) from exc
 
         except BadRequestError as exc:
-            raise LLMBadRequestError(str(exc)) from exc
+            raise LLMBadRequestError(safe_error_detail(exc)) from exc
 
         # Our own fail-fast errors (e.g. the truncation guard above) must not be
         # swallowed by the generic retry handler below and re-attempted.
@@ -229,7 +249,7 @@ def extract_rules(
         except Exception as exc:
             category = _classify_exception(exc)
             if category == "fail-fast":
-                raise LLMBadRequestError(str(exc)) from exc
+                raise LLMBadRequestError(safe_error_detail(exc)) from exc
 
             last_exc = exc
             if attempt < settings.max_retries:
@@ -240,7 +260,7 @@ def extract_rules(
 
     raise LLMRetryExhaustedError(
         f"Extraction failed after {settings.max_retries + 1} attempts. "
-        f"Last error: {type(last_exc).__name__}: {last_exc}"
+        f"Last error: {safe_error_detail(last_exc)}"
     ) from last_exc
 
 
@@ -302,10 +322,10 @@ async def evaluate_rule(
                 return (response.parsed_output, usage)
 
             except (AuthenticationError, NotFoundError) as exc:
-                raise LLMAuthError(str(exc)) from exc
+                raise LLMAuthError(safe_error_detail(exc)) from exc
 
             except BadRequestError as exc:
-                raise LLMBadRequestError(str(exc)) from exc
+                raise LLMBadRequestError(safe_error_detail(exc)) from exc
 
             # Defensive: re-raise immediately so a future refactor that moves
             # _make_async_client inside this loop cannot accidentally retry on a
@@ -316,7 +336,7 @@ async def evaluate_rule(
             except Exception as exc:
                 category = _classify_exception(exc)
                 if category == "fail-fast":
-                    raise LLMBadRequestError(str(exc)) from exc
+                    raise LLMBadRequestError(safe_error_detail(exc)) from exc
 
                 last_exc = exc
                 if attempt < settings.max_retries:
@@ -326,7 +346,7 @@ async def evaluate_rule(
         raise LLMRetryExhaustedError(
             f"Evaluation of rule '{rule.rule_id}' failed after "
             f"{settings.max_retries + 1} attempts. "
-            f"Last error: {type(last_exc).__name__}: {last_exc}"
+            f"Last error: {safe_error_detail(last_exc)}"
         ) from last_exc
 
 

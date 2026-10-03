@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-from pathlib import Path
 
 
 def main() -> None:
@@ -38,7 +37,11 @@ def main() -> None:
         "--text",
         required=True,
         metavar="FILE|-",
-        help="Path to a plain-text file containing the marketing copy, or '-' to read from stdin",
+        help=(
+            "Path to a plain-text file containing the marketing copy, or '-' to "
+            "read from stdin. Input past the 2000-code-point cap "
+            "(COMPLIANCE_MARKETING_TEXT_CAP) is not read and the run is refused."
+        ),
     )
 
     # ------------------------------------------------------------------
@@ -91,31 +94,52 @@ def main() -> None:
 # ---------------------------------------------------------------------------
 
 
+def _load_settings_or_exit():
+    """
+    Load settings, reporting a bad environment variable as a plain message.
+
+    Exits 2 (incomplete) rather than letting ConfigError reach the top level
+    as a traceback — a mistyped COMPLIANCE_* value is user error, not a crash.
+    """
+    from compliance_agent.config import ConfigError, load_settings
+
+    try:
+        return load_settings()
+    except ConfigError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        sys.exit(2)
+
+
 def _cmd_check(args: argparse.Namespace) -> None:
     """Handle the ``check`` subcommand."""
+    from compliance_agent import pipeline
+
+    settings = _load_settings_or_exit()
+
+    # Read one code point past the cap and no further. Ingestion rejects
+    # anything over the cap anyway, so buffering a whole oversized stream or
+    # file first only spends memory to reach the same refusal.
+    limit = settings.marketing_text_cap + 1
+
     if args.text == "-":
-        marketing_text = sys.stdin.read()
+        marketing_text = sys.stdin.read(limit)
     else:
         try:
-            marketing_text = Path(args.text).read_text(encoding="utf-8")
+            with open(args.text, encoding="utf-8") as fh:
+                marketing_text = fh.read(limit)
         except OSError as exc:
             print(f"Error reading file: {exc}", file=sys.stderr)
             sys.exit(1)
 
-    from compliance_agent.config import load_settings
-    from compliance_agent import pipeline
-
-    settings = load_settings()
     exit_code = pipeline.run_check(marketing_text, settings, refresh=False)
     sys.exit(exit_code)
 
 
 def _cmd_extract_rules(args: argparse.Namespace) -> None:
     """Handle the ``extract-rules`` subcommand."""
-    from compliance_agent.config import load_settings
     from compliance_agent import pipeline
 
-    settings = load_settings()
+    settings = _load_settings_or_exit()
     exit_code = pipeline.run_extract_rules(settings, args.refresh)
     sys.exit(exit_code)
 
@@ -156,9 +180,13 @@ def _cmd_show(args: argparse.Namespace) -> None:
     """Handle the ``show`` subcommand."""
     from compliance_agent.config import repo_root, runs_dir
 
-    report_path = runs_dir(repo_root()) / args.run_id / "report.md"
+    base = runs_dir(repo_root()).resolve()
+    report_path = (base / args.run_id / "report.md").resolve()
 
-    if not report_path.exists():
+    # run_id comes from the command line: '..' segments must not walk the
+    # lookup out of runs/. Both checks report the same thing, so a confined
+    # path and a missing run are indistinguishable to the caller.
+    if not report_path.is_relative_to(base) or not report_path.exists():
         print(
             f"Error: no report found for run '{args.run_id}'",
             file=sys.stderr,

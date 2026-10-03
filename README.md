@@ -67,8 +67,6 @@ This prevents a partial result from being read as a clean pass.
 - No multi-provider support — Claude (Anthropic) only, as specified.
 - No 100% rule recall guarantee — the extraction prompt is carefully designed but LLM outputs
   are probabilistic; the cache lets a human inspect and iterate.
-- No concurrent-run locking — `history.jsonl` uses file appends; simultaneous runs would
-  interleave lines. Documented as single-run-at-a-time.
 - No `typer` or `click` — `argparse` only, to stay within the locked dependency list.
 - No schema migration for the rules cache — a source-file hash change triggers full
   re-extraction rather than a diff-based update.
@@ -433,7 +431,7 @@ free and deterministic.
 
 | Job | What it proves |
 |---|---|
-| `tests` | The 106-test suite on Python 3.11, 3.12 and 3.13. Every LLM call is mocked at the `llm.py` boundary, so no key is needed. |
+| `tests` | The 131-test suite on Python 3.11, 3.12 and 3.13. Every LLM call is mocked at the `llm.py` boundary, so no key is needed. |
 | `gate` | The committed rules cache is schema-valid, its `source_hash` still matches the regulation file, `rule_id`s are unique, and at least 95% of `source_quote` values are exact substrings of the source. Then `samples/overlimit.txt` is run end-to-end through the real CLI with no key present, proving the over-cap path still exits 2 before reaching the API. |
 
 The verbatim-quote ratio is the cheapest available check that the extractor cited rather than
@@ -544,9 +542,9 @@ encode this repo's own invariants rather than generic advice:
   renamed, the cache file `rules/fca-cobs-4-financial-promotions.json` becomes orphaned and
   the new source triggers a full re-extraction.
 
-- **Single-run-at-a-time**: `history.jsonl` is appended without file locking. Parallel `check`
-  invocations would produce interleaved lines. This is documented and acceptable for a
-  single-user CLI.
+- **Concurrent runs**: `history.jsonl` is appended under an exclusive `flock`, so parallel
+  `check` invocations cannot interleave a line. On a platform without `fcntl` the lock is
+  skipped and the append falls back to `O_APPEND` alone.
 
 - **Missing API key at runtime:** if `ANTHROPIC_API_KEY` is absent from both the environment
   and `.env`, the pipeline now raises `LLMAuthError` immediately and exits 2 — no retry
@@ -558,11 +556,10 @@ encode this repo's own invariants rather than generic advice:
   `evals/check_rules_cache.py` exits 1 and names the remedy (`extract-rules --refresh`).
   `run.sh` runs this check automatically before any billed operation.
 
-- **Non-numeric `COMPLIANCE_*` environment variables:** `config.py` passes the raw string
-  directly to `int()` (lines 49–53). A non-integer value such as
-  `COMPLIANCE_MAX_RETRIES=yes` raises an uncaught `ValueError` with a Python traceback
-  rather than a friendly error message. Values must be plain integers; there is no input
-  validation at config time.
+- **Non-numeric `COMPLIANCE_*` environment variables:** a non-integer value such as
+  `COMPLIANCE_MAX_RETRIES=yes` raises `ConfigError`, which the CLI reports as
+  `Configuration error: COMPLIANCE_MAX_RETRIES must be an integer, got 'yes'` and exits 2.
+  Values must be plain integers; no range checking is applied beyond that.
 
 ---
 
@@ -602,10 +599,6 @@ encode this repo's own invariants rather than generic advice:
   actually exercised (had their preconditions met) vs. returned `not-applicable` would be
   useful for assessing whether the marketing text was meaningfully tested against the
   regulation.
-
-- **Concurrent-run locking**: a lock file or atomic rename would make `history.jsonl` safe for
-  parallel runs, important if the tool is used in a CI pipeline that runs multiple checks in
-  parallel.
 
 ---
 

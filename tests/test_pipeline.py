@@ -382,3 +382,79 @@ def test_no_rule_failures_leaves_stage_detail_empty(tmp_root):
     stage = _eval_stage(record["stages"])
     assert stage["success"] is True
     assert stage["detail"] is None
+
+
+# ---------------------------------------------------------------------------
+# Rules-cache persistence is the orchestrator's job
+#
+# decompose.get_rules returns a freshly extracted artifact without writing it:
+# stage modules must not touch disk. pipeline.py performs the write so that a
+# failure is a recorded stage failure rather than a traceback out of a stage.
+# ---------------------------------------------------------------------------
+
+
+def test_extraction_writes_rules_cache(tmp_root):
+    """A cache miss extracts and then persists the artifact to rules/."""
+    rule = _rule()
+    cache_file = tmp_root / "rules" / "fca-cobs-4-financial-promotions.json"
+    assert not cache_file.exists()
+
+    with _patch_extraction([rule]), _patch_evaluation([_verdict(rule.rule_id, "compliant")]):
+        code = pipeline.run_check("some marketing text", _settings(), refresh=False)
+
+    assert code == 0
+    assert cache_file.exists()
+    assert rule.rule_id in cache_file.read_text(encoding="utf-8")
+
+
+def test_rules_cache_write_failure_is_a_recorded_stage_failure(tmp_root):
+    """
+    An unwritable rules/ exits 2 with a recorded decomposition failure.
+
+    Before the write moved here it escaped get_rules as an unhandled OSError,
+    so the run produced a traceback and no artifacts at all.
+    """
+    rule = _rule()
+    with _patch_extraction([rule]), patch(
+        "compliance_agent.pipeline.write_rules_cache",
+        side_effect=OSError("read-only file system"),
+    ):
+        code = pipeline.run_check("some marketing text", _settings(), refresh=False)
+
+    assert code == 2
+
+    history = _read_history(tmp_root)
+    assert len(history) == 1
+    assert history[0]["overall_outcome"] == "incomplete"
+
+    run_json = json.loads(
+        (tmp_root / "runs" / history[0]["run_id"] / "run.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    decomposition = [s for s in run_json["stages"] if s["stage"] == "decomposition"]
+    assert decomposition and decomposition[0]["success"] is False
+
+
+def test_stage_detail_omits_the_underlying_exception_message(tmp_root):
+    """
+    run.json must not quote an exception message from a failed LLM call.
+
+    The stage detail is persisted and printed, and SDK exception strings carry
+    request context — on an auth failure, potentially the credential itself.
+    """
+    secret = "sk-ant-api03-NOTAREALKEY"
+    with patch(
+        "compliance_agent.llm.extract_rules",
+        side_effect=RuntimeError(f"request failed with key={secret}"),
+    ):
+        code = pipeline.run_check("some marketing text", _settings(), refresh=False)
+
+    assert code == 2
+
+    history = _read_history(tmp_root)
+    run_dir = tmp_root / "runs" / history[0]["run_id"]
+    persisted = (run_dir / "run.json").read_text(encoding="utf-8")
+
+    assert secret not in persisted
+    assert "RuntimeError" in persisted

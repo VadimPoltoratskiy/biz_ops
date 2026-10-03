@@ -120,7 +120,7 @@ async def _run_all(
                         outcome="error",
                         reasoning=(
                             f"Evaluation failed: "
-                            f"{type(result).__name__}: {result}"
+                            f"{llm.safe_error_detail(result)}"
                         ),
                         confidence="low",
                         evidence_quote=None,

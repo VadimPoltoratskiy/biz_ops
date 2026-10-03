@@ -14,6 +14,30 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
+class ConfigError(Exception):
+    """Raised when an environment variable holds an unusable value."""
+
+
+def _env_int(name: str, default: int) -> int:
+    """
+    Read an integer environment variable, or return *default* when unset.
+
+    A non-numeric value is a typo in the environment, not a program bug, so it
+    raises ConfigError for the CLI to report. Letting ``int()`` raise would
+    print a bare traceback and bypass the fail-fast error handling every other
+    failure in this tool goes through.
+    """
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        raise ConfigError(
+            f"{name} must be an integer, got {raw!r}"
+        ) from None
+
+
 @dataclasses.dataclass(frozen=True)
 class Settings:
     """Frozen configuration read from environment variables."""
@@ -40,17 +64,18 @@ def load_settings() -> Settings:
 
     load_dotenv() is a no-op if .env is absent, so the tool works in CI
     environments that inject the key directly via environment variables.
+
+    Raises:
+        ConfigError: If a numeric COMPLIANCE_* variable is not an integer.
     """
     load_dotenv()
 
     return Settings(
         api_key=os.environ.get("ANTHROPIC_API_KEY"),
         model=os.environ.get("COMPLIANCE_MODEL", "claude-haiku-4-5"),
-        marketing_text_cap=int(
-            os.environ.get("COMPLIANCE_MARKETING_TEXT_CAP", "2000")
-        ),
-        max_concurrency=int(os.environ.get("COMPLIANCE_MAX_CONCURRENCY", "4")),
-        max_retries=int(os.environ.get("COMPLIANCE_MAX_RETRIES", "3")),
+        marketing_text_cap=_env_int("COMPLIANCE_MARKETING_TEXT_CAP", 2000),
+        max_concurrency=_env_int("COMPLIANCE_MAX_CONCURRENCY", 4),
+        max_retries=_env_int("COMPLIANCE_MAX_RETRIES", 3),
     )
 
 

@@ -1,7 +1,10 @@
 """
 Decomposition module — cache decision and extraction LLM call.
 
-Writes to disk only via ``save_cache``. All other functions are pure transformations.
+Every function here is a pure transformation or a read; nothing in this module
+writes to disk. The cache write it used to perform now belongs to
+``runlog.write_rules_cache``, called by ``pipeline.py`` once ``get_rules``
+reports that extraction happened.
 """
 
 from __future__ import annotations
@@ -42,20 +45,6 @@ def load_cache(rules_dir: Path, source_id: str) -> RulesCacheArtifact | None:
         )
     except Exception:
         return None
-
-
-def save_cache(
-    rules_dir: Path, source_id: str, artifact: RulesCacheArtifact
-) -> None:
-    """
-    Write the rules cache artifact to disk.
-
-    Creates *rules_dir* if it does not exist yet (AC-30: rules/ created on demand).
-    """
-    rules_dir.mkdir(parents=True, exist_ok=True)
-    cache_path(rules_dir, source_id).write_text(
-        artifact.model_dump_json(indent=2), encoding="utf-8"
-    )
 
 
 def needs_extraction(
@@ -152,6 +141,10 @@ def get_rules(
         ``(artifact, was_extracted, usage_or_None)`` where:
         - ``was_extracted`` is ``True`` when the LLM was called.
         - ``usage_or_None`` is ``None`` when the cache was reused.
+
+    A freshly extracted artifact is returned but NOT persisted — the caller
+    writes it via ``runlog.write_rules_cache`` so that a write failure is
+    recorded as a stage failure instead of escaping as a traceback.
     """
     current_hash = compute_source_hash(source_text)
     cache = load_cache(rules_dir, source_id)
@@ -160,7 +153,6 @@ def get_rules(
         artifact, usage = run_extraction(
             source_text, source_id, current_hash, settings
         )
-        save_cache(rules_dir, source_id, artifact)
         return (artifact, True, usage)
 
     assert cache is not None  # needs_extraction returned False → cache is valid

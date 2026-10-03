@@ -16,6 +16,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+import anthropic
+
 from compliance_agent import llm
 from compliance_agent.config import Settings
 from compliance_agent.models import ExtractedRule, ExtractedRulesList
@@ -145,3 +147,83 @@ def test_missing_api_key_raises_auth_error_without_retrying():
         with pytest.raises(llm.LLMAuthError, match="API key"):
             llm.extract_rules("source text", no_key, "prompt")
     mock_sleep.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# Exception sanitisation at the SDK boundary
+#
+# Stage details and error verdicts are persisted to run.json and printed in the
+# report, so an SDK exception message must not reach them: those carry request
+# context — URL, headers, body excerpts — and on an auth failure can echo the
+# rejected credential back out into a committed artifact.
+# ---------------------------------------------------------------------------
+
+SECRET = "sk-ant-api03-NOTAREALKEY"
+
+
+class _StatusError(Exception):
+    """Stand-in for an SDK error that exposes an HTTP status."""
+
+    status_code = 503
+
+
+def test_safe_error_detail_omits_the_exception_message():
+    detail = llm.safe_error_detail(RuntimeError(f"connecting with {SECRET}"))
+    assert detail == "RuntimeError"
+    assert SECRET not in detail
+
+
+def test_safe_error_detail_keeps_the_http_status():
+    assert llm.safe_error_detail(_StatusError(f"body: {SECRET}")) == (
+        "_StatusError (HTTP 503)"
+    )
+
+
+def test_safe_error_detail_passes_through_our_own_messages():
+    """Messages this module authors are already safe and stay actionable."""
+    detail = llm.safe_error_detail(llm.LLMAuthError("No API key configured."))
+    assert detail == "No API key configured."
+
+
+def test_safe_error_detail_handles_a_missing_exception():
+    assert llm.safe_error_detail(None) == "unknown error"
+
+
+def test_real_sdk_fail_fast_error_is_not_echoed():
+    """A genuine BadRequestError must not carry its body text into our error."""
+    import httpx2
+
+    response = httpx2.Response(
+        400,
+        request=httpx2.Request("POST", "https://api.anthropic.com/v1/messages"),
+    )
+    sdk_error = anthropic.BadRequestError(
+        f"invalid request, key={SECRET}", response=response, body=None
+    )
+    # Guard the premise: the SDK message really does contain the secret.
+    assert SECRET in str(sdk_error)
+
+    client = MagicMock()
+    client.messages.stream.side_effect = sdk_error
+
+    with patch.object(llm, "_make_sync_client", return_value=client):
+        with pytest.raises(llm.LLMBadRequestError) as exc_info:
+            llm.extract_rules("source text", _settings(max_retries=0), "prompt")
+
+    message = str(exc_info.value)
+    assert SECRET not in message
+    assert message == "BadRequestError (HTTP 400)"
+
+
+def test_retry_exhausted_message_omits_the_underlying_detail():
+    client = MagicMock()
+    client.messages.stream.side_effect = RuntimeError(f"timeout, key={SECRET}")
+
+    with patch.object(llm, "_make_sync_client", return_value=client):
+        with patch("time.sleep"):
+            with pytest.raises(llm.LLMRetryExhaustedError) as exc_info:
+                llm.extract_rules("source text", _settings(max_retries=1), "prompt")
+
+    message = str(exc_info.value)
+    assert SECRET not in message
+    assert "RuntimeError" in message

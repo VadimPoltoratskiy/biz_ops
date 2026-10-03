@@ -178,17 +178,24 @@ def test_per_rule_failure_isolation(sample_rule, mock_async_client):
     assert "RuntimeError" in by_id["rule-b"].reasoning
 
 
-def test_per_rule_error_verdict_contains_exception_detail(sample_rule, mock_async_client):
-    """AC-25: the error verdict reasoning includes the exception type and message."""
+def test_per_rule_error_verdict_names_type_but_not_message(sample_rule, mock_async_client):
+    """
+    AC-25: the error verdict names the exception type — and nothing more.
+
+    The reasoning is persisted to run.json and printed in the report, so a raw
+    SDK exception message must not reach it: those can carry request context,
+    including the rejected credential on an auth failure.
+    """
     async def fake_evaluate(rule, mt, settings, prompt, semaphore, client):
-        raise ValueError("unexpected schema mismatch")
+        raise ValueError("unexpected schema mismatch sk-ant-secret")
 
     with patch("compliance_agent.llm.evaluate_rule", side_effect=fake_evaluate):
         verdicts, _ = evaluate_all_rules([sample_rule], "some text", _settings())
 
     assert verdicts[0].outcome == "error"
     assert "ValueError" in verdicts[0].reasoning
-    assert "unexpected schema mismatch" in verdicts[0].reasoning
+    assert "unexpected schema mismatch" not in verdicts[0].reasoning
+    assert "sk-ant-secret" not in verdicts[0].reasoning
 
 
 # ---------------------------------------------------------------------------

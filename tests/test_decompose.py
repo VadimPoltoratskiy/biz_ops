@@ -15,13 +15,18 @@ from compliance_agent.decompose import (
     get_rules,
     load_cache,
     needs_extraction,
-    save_cache,
 )
 from compliance_agent.models import (
     ExtractedRulesList,
     RulesCacheArtifact,
     TokenUsage,
 )
+from compliance_agent.runlog import write_rules_cache
+
+
+def _write_cache(rules_dir: Path, source_id: str, artifact: RulesCacheArtifact) -> None:
+    """Seed a cache file the way pipeline.py does: runlog writes, caller locates."""
+    write_rules_cache(cache_path(rules_dir, source_id), artifact)
 
 
 # ---------------------------------------------------------------------------
@@ -76,7 +81,7 @@ def test_no_cache_refresh_also_extracts():
 
 
 # ---------------------------------------------------------------------------
-# load_cache / save_cache roundtrip
+# load_cache / write_rules_cache roundtrip
 # ---------------------------------------------------------------------------
 
 
@@ -94,18 +99,18 @@ def test_load_cache_corrupt_json_returns_none(tmp_path: Path):
 def test_save_and_load_cache_roundtrip(tmp_path: Path):
     """save_cache writes a file that load_cache deserialises correctly."""
     artifact = _make_artifact(source_hash="abc123", source_id="roundtrip")
-    save_cache(tmp_path, "roundtrip", artifact)
+    _write_cache(tmp_path, "roundtrip", artifact)
     loaded = load_cache(tmp_path, "roundtrip")
     assert loaded is not None
     assert loaded.source_hash == "abc123"
     assert loaded.source_id == "roundtrip"
 
 
-def test_save_cache_creates_directory_if_missing(tmp_path: Path):
+def test_write_rules_cache_creates_directory_if_missing(tmp_path: Path):
     """save_cache creates the rules directory if it does not already exist."""
     new_dir = tmp_path / "newrules"
     assert not new_dir.exists()
-    save_cache(new_dir, "test", _make_artifact())
+    _write_cache(new_dir, "test", _make_artifact())
     assert new_dir.exists()
     assert (new_dir / "test.json").exists()
 
@@ -132,7 +137,7 @@ def test_get_rules_reuses_cache_on_hash_hit(tmp_path: Path, settings, sample_rul
         extracted_at="2026-09-03T00:00:00",
         rules=[sample_rule],
     )
-    save_cache(tmp_path, "test-source", artifact)
+    _write_cache(tmp_path, "test-source", artifact)
 
     with patch("compliance_agent.llm.extract_rules") as mock_extract:
         result, was_extracted, usage = get_rules(
@@ -162,8 +167,10 @@ def test_get_rules_extracts_on_cache_miss(tmp_path: Path, settings, sample_rule)
     assert was_extracted is True
     assert usage == extraction_usage
     assert result.rules[0].rule_id == sample_rule.rule_id
-    # Cache must have been written after extraction.
-    assert (tmp_path / "test-source.json").exists()
+    # The stage returns the artifact without persisting it — pipeline.py owns
+    # the write so a failure there is a recorded stage failure. See
+    # test_pipeline.test_extraction_writes_rules_cache.
+    assert not (tmp_path / "test-source.json").exists()
 
 
 def test_get_rules_refresh_forces_new_extraction(tmp_path: Path, settings, sample_rule):
@@ -177,7 +184,7 @@ def test_get_rules_refresh_forces_new_extraction(tmp_path: Path, settings, sampl
         extracted_at="2026-09-03T00:00:00",
         rules=[sample_rule],
     )
-    save_cache(tmp_path, "test-source", artifact)
+    _write_cache(tmp_path, "test-source", artifact)
 
     extraction_usage = TokenUsage(input_tokens=100, output_tokens=50)
     extracted = ExtractedRulesList(rules=[sample_rule])
@@ -203,7 +210,7 @@ def test_get_rules_hash_mismatch_triggers_extraction(tmp_path: Path, settings, s
         extracted_at="2026-09-03T00:00:00",
         rules=[sample_rule],
     )
-    save_cache(tmp_path, "test-source", artifact)
+    _write_cache(tmp_path, "test-source", artifact)
 
     # The current source text produces a different hash.
     source_text = "Updated regulation text"

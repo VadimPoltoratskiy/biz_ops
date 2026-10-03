@@ -1,7 +1,7 @@
 # Hermetic CI — everything here is free and deterministic, so it blocks merges.
 #
 # Two jobs:
-#  - tests: the 106-test suite across the supported Python range. Every LLM call
+#  - tests: the 131-test suite across the supported Python range. Every LLM call
 #    is mocked at the llm.py boundary (see tests/conftest.py), so no API key is
 #    needed and nothing is billed.
 #  - gate: two checks on the committed artifacts rather than the code — the
